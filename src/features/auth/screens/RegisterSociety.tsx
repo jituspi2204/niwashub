@@ -9,9 +9,8 @@ import {View, Text, TextInput, Button} from '../../../components';
 import {useTheme} from '../../../theme/ThemeContext';
 import Icon from '../../../components/Icon';
 import Header from '../../../components/Header';
-import Icons from 'react-native-vector-icons/Feather';
 
-const RegisterScreen: React.FC = () => {
+const RegisterSocietyScreen: React.FC = () => {
     const {colors} = useTheme();
     const router = {};
     const [agree, setAgree] = React.useState(false);
@@ -28,11 +27,11 @@ const RegisterScreen: React.FC = () => {
             <ScrollView>
                 <View style={[styles.titleContainer]}>
                     <Text h5 n700>
-                        Enter your details
+                        Create your account
                     </Text>
                     <Text caption n400>
                         Fill out the form below to create your account and start
-                        managing your society effortlessly.
+                        managing your finances effortlessly.
                     </Text>
                 </View>
                 <View
@@ -42,22 +41,11 @@ const RegisterScreen: React.FC = () => {
                             backgroundColor: colors.n50,
                         },
                     ]}>
-                    <TouchableOpacity
-                        style={[
-                            styles.imageContainer,
-                            {backgroundColor: colors.n200},
-                        ]}>
-                        <Icons name="image" size={50} color={colors.n500} />
-                    </TouchableOpacity>
-                    <Text
-                        caption
-                        n500
-                        style={{alignSelf: 'center', marginBottom: 10}}>
-                        Upload your image
-                    </Text>
                     <TextInput type="user" placeholder="Your name" />
                     <TextInput type="phone-other" placeholder="Phone number" />
-                    <TextInput type="email" placeholder="Email" />
+                    <TextInput type="email" placeholder="Phone number" />
+                    <TextInput type="password" placeholder="Password" />
+                    <TextInput type="password" placeholder="Confirm password" />
 
                     <Button
                         type="primary"
@@ -109,14 +97,5 @@ const styles = StyleSheet.create({
         justifyContent: 'flex-start',
         width: '100%',
     },
-    imageContainer: {
-        width: 100,
-        height: 100,
-        alignSelf: 'center',
-        borderRadius: 200,
-        marginVertical: 10,
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
 });
-export default RegisterScreen;
+export default RegisterSocietyScreen;

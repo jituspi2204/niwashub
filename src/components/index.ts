@@ -5,4 +5,14 @@ import LoadingView from './LoadingView.tsx';
 import TextInput from './TextInput';
 import Button from './Button';
 import Header from './Header';
-export {Icon, View, Text, LoadingView, TextInput, Button, Header};
+import HeadingWithLine from './HeadingWithLine';
+export {
+    Icon,
+    View,
+    Text,
+    LoadingView,
+    TextInput,
+    Button,
+    Header,
+    HeadingWithLine,
+};

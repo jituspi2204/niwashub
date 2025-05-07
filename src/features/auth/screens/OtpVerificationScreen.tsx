@@ -1,6 +1,5 @@
 import React from 'react';
 import {
-    Dimensions,
     Image,
     SafeAreaView,
     ScrollView,
@@ -8,18 +7,13 @@ import {
     TouchableOpacity,
 } from 'react-native';
 import {useTheme} from '../../../theme/ThemeContext.tsx';
-import {
-    Button,
-    HeadingWithLine,
-    Icon,
-    Text,
-    TextInput,
-    View,
-} from '../../../components';
+import {Button, HeadingWithLine, Text, View} from '../../../components';
 import {useNavigation} from '@react-navigation/native';
 import {images} from '../../../utils';
+import Header from '../../../components/Header.tsx';
+import {OtpInput} from 'react-native-otp-entry';
 
-const LoginScreen: React.FC = () => {
+const OtpVerificationScreen: React.FC = () => {
     const {colors} = useTheme();
     const router = useNavigation();
     return (
@@ -31,14 +25,10 @@ const LoginScreen: React.FC = () => {
                 },
             ]}>
             <ScrollView contentContainerStyle={{width: '100%'}}>
-                <Image source={images.scoiety2} style={styles.image} />
+                <Image source={images.scoiety1} style={styles.image} />
                 <View style={[styles.titleContainer]}>
                     <Text h5 n700>
-                        Where Community Meets Convenience.
-                    </Text>
-                    <Text caption n400>
-                        Sign in to manage your society, stay updated, and
-                        connect with your community.
+                        Manage. Connect. Live Better.
                     </Text>
                 </View>
 
@@ -50,36 +40,42 @@ const LoginScreen: React.FC = () => {
                         },
                     ]}>
                     <HeadingWithLine
-                        title="Sign in / Sign Up"
-                        style={{marginVertical: 20}}
+                        title="OTP Verification"
+                        style={{marginVertical: 10}}
                     />
-                    <TextInput type="phone" />
+                    <Text
+                        caption
+                        n400
+                        style={{textAlign: 'justify', marginVertical: 10}}>
+                        Please enter the verification code sent to your
+                        registered number.
+                    </Text>
+                    <OtpInput
+                        numberOfDigits={6}
+                        theme={{
+                            focusedPinCodeContainerStyle: {
+                                borderColor: colors.blue600,
+                            },
+                        }}
+                        onTextChange={text => console.log(text)}
+                    />
                     <Button type="primary" style={{marginVertical: 24}}>
                         <Text base blue50>
                             Send OTP
                         </Text>
                     </Button>
                 </View>
+                <View style={styles.bottomContainer}>
+                    <Text caption n400>
+                        Edit phone number?{' '}
+                    </Text>
+                    <TouchableOpacity>
+                        <Text captionMedium blue500>
+                            Change phone number
+                        </Text>
+                    </TouchableOpacity>
+                </View>
             </ScrollView>
-            <View style={styles.bottomContainer}>
-                <Text caption n400>
-                    By signing up, you agree to our and{' '}
-                </Text>
-                <TouchableOpacity>
-                    <Text captionMedium blue500>
-                        Terms & Conditions
-                    </Text>
-                </TouchableOpacity>
-                <Text caption n400>
-                    {' '}
-                    and{' '}
-                </Text>
-                <TouchableOpacity>
-                    <Text captionMedium blue500>
-                        Privacy policy
-                    </Text>
-                </TouchableOpacity>
-            </View>
         </SafeAreaView>
     );
 };
@@ -129,7 +125,7 @@ const styles = StyleSheet.create({
         padding: 16,
         width: '100%',
         flexDirection: 'row',
-        justifyContent: 'flex-start',
+        justifyContent: 'center',
         alignItems: 'center',
         flexWrap: 'wrap',
         alignSelf: 'flex-end',
@@ -142,4 +138,4 @@ const styles = StyleSheet.create({
         // height: 'auto',
     },
 });
-export default LoginScreen;
+export default OtpVerificationScreen;

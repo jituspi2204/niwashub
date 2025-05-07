@@ -8,22 +8,23 @@ import DashboardStack from './DashboardStack.tsx';
 import AuthStack from './AuthStack.tsx';
 
 const AppNavigation: React.FC = () => {
-
     const theme = useTheme();
-    const auth = useSelector((state : RootState)=> state.auth);
+    const auth = useSelector((state: RootState) => state.auth);
     const dispatch = useDispatch();
 
     useEffect(() => {
-        dispatch(logInUser(false));
+        dispatch(logInUser(true));
     }, []);
 
-
     return (
-    <>
-        {auth.loggedIn ? <DashboardStack /> : <AuthStack />}
-        <StatusBar barStyle="dark-content" backgroundColor={theme.colors.background} />
-    </>
-  );
+        <>
+            {auth.loggedIn ? <DashboardStack /> : <AuthStack />}
+            <StatusBar
+                barStyle="dark-content"
+                backgroundColor={theme.colors.background}
+            />
+        </>
+    );
 };
 
 export default AppNavigation;

@@ -232,8 +232,13 @@ export default function TextInput({
                         </Text>
                     </View>
                     <Input
-                        style={[styles.input, {color: colors.n700}]}
+                        maxLength={10}
+                        style={[
+                            styles.input,
+                            {color: colors.n700, letterSpacing: 3},
+                        ]}
                         {...props}
+                        keyboardType="numeric"
                     />
                 </View>
             );
@@ -255,7 +260,7 @@ export default function TextInput({
                         <Icons name="phone" size={24} color={colors.n400} />
                     </View>
                     <Input
-                        style={[styles.input, {color: colors.n700}]}
+                        style={[styles.input, {color: colors.n600}]}
                         {...props}
                     />
                 </View>
@@ -272,8 +277,8 @@ const styles = StyleSheet.create({
         borderWidth: 1.5,
     },
     input: {
-        fontSize: 14,
-        fontFamily: 'poppins-regular',
+        fontSize: 16,
+        fontFamily: 'Satoshi-Bold',
         minHeight: 56,
         borderRadius: 12,
         padding: 16,
