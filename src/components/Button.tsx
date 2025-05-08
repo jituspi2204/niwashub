@@ -1,13 +1,12 @@
 import React from 'react';
 import {
-    Platform,
     StyleSheet,
     TouchableOpacity,
     GestureResponderEvent,
     StyleProp,
     ViewStyle,
 } from 'react-native';
-import { useTheme } from '../theme/ThemeContext';
+import {useTheme} from '../theme/ThemeContext';
 
 type ButtonProps = {
     type: 'primary' | 'secondary' | 'dashed' | 'svg';
@@ -20,16 +19,16 @@ type ButtonProps = {
 };
 
 export default function Button({
-                                   type,
-                                   buttonStyles,
-                                   disabled = false,
-                                   activeOpacity = 0.8,
-                                   onPress,
-                                   style,
-                                   children,
-                                   ...props
-                               }: ButtonProps) {
-    const { colors } = useTheme();
+    type,
+    buttonStyles,
+    disabled = false,
+    activeOpacity = 0.8,
+    onPress,
+    style,
+    children,
+    ...props
+}: ButtonProps) {
+    const {colors} = useTheme();
 
     let buttonContent;
 
@@ -39,14 +38,13 @@ export default function Button({
                 <TouchableOpacity
                     style={[
                         styles.container,
-                        { backgroundColor: colors.blue500 },
+                        {backgroundColor: colors.primary},
                         style,
                     ]}
                     disabled={disabled}
                     activeOpacity={activeOpacity}
                     onPress={onPress}
-                    {...props}
-                >
+                    {...props}>
                     {children}
                 </TouchableOpacity>
             );
@@ -67,8 +65,7 @@ export default function Button({
                     disabled={disabled}
                     activeOpacity={activeOpacity}
                     onPress={onPress}
-                    {...props}
-                >
+                    {...props}>
                     {children}
                 </TouchableOpacity>
             );
@@ -89,8 +86,7 @@ export default function Button({
                     disabled={disabled}
                     activeOpacity={activeOpacity}
                     onPress={onPress}
-                    {...props}
-                >
+                    {...props}>
                     {children}
                 </TouchableOpacity>
             );
@@ -109,8 +105,7 @@ export default function Button({
                     ]}
                     activeOpacity={activeOpacity}
                     disabled={disabled}
-                    {...props}
-                >
+                    {...props}>
                     {children}
                 </TouchableOpacity>
             );

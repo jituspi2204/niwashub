@@ -11,9 +11,9 @@ const AuthStack: React.FC = () => {
             screenOptions={{
                 headerShown: false,
             }}>
+            <Stack.Screen name="Login" component={LoginScreen} />
             <Stack.Screen name="Register" component={RegisterScreen} />
             <Stack.Screen name="Otp" component={OtpVerificationScreen} />
-            <Stack.Screen name="Login" component={LoginScreen} />
         </Stack.Navigator>
     );
 };

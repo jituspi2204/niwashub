@@ -1,10 +1,10 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 
-const IncomeScreen: React.FC = () => {
+const PrivacyAndSecurityScreen : React.FC = () => {
   return (
     <View style={styles.container}>
-      <Text>IncomeScreen Component</Text>
+      <Text>PrivacyAndSecurityScreen Component</Text>
     </View>
   );
 };
@@ -17,4 +17,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default IncomeScreen;
+export default PrivacyAndSecurityScreen;

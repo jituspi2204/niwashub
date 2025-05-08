@@ -1,10 +1,15 @@
 import React from 'react';
-import { ActivityIndicator, SafeAreaView, StyleSheet } from 'react-native';
-import { useTheme } from '../theme/ThemeContext';
+import {SafeAreaView, StyleSheet} from 'react-native';
+import {useTheme} from '../theme/ThemeContext';
 import LottieView from 'lottie-react-native';
+import {Text} from './index.ts';
 
-export default function LoadingView() {
-    const { colors } = useTheme();
+interface Props {
+    loadingText?: string;
+}
+
+const LoadingView: React.FC<Props> = ({loadingText}) => {
+    const {colors} = useTheme();
     const animation = React.useRef(null);
 
     return (
@@ -14,17 +19,22 @@ export default function LoadingView() {
                 {
                     backgroundColor: colors.background,
                 },
-            ]}
-        >
+            ]}>
             <LottieView
                 autoPlay
                 ref={animation}
                 style={[styles.lottie]}
                 source={require('../../assets/loading.json')}
             />
+            <Text h6 style={{color: '#1FAD98'}}>
+                finchmoney.ai
+            </Text>
+            <Text base n400>
+                {loadingText}
+            </Text>
         </SafeAreaView>
     );
-}
+};
 
 const styles = StyleSheet.create({
     container: {
@@ -40,3 +50,5 @@ const styles = StyleSheet.create({
         height: 140,
     },
 });
+
+export default LoadingView;

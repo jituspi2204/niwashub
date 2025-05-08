@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import {
     Image,
     SafeAreaView,
@@ -8,15 +8,32 @@ import {
 } from 'react-native';
 import {useTheme} from '../../../theme/ThemeContext.tsx';
 import {Button, HeadingWithLine, Text, View} from '../../../components';
-import {useNavigation} from '@react-navigation/native';
+import { NavigationProp, RouteProp, useNavigation } from '@react-navigation/native';
 import {images} from '../../../utils';
 import Header from '../../../components/Header.tsx';
 import {OtpInput} from 'react-native-otp-entry';
+import {AuthStackParamList} from '../../../navigation/types';
+import WrappedView from '../../../components/WrappedView.tsx';
+import { LoadingProps } from '../../../utils/types.ts';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from '../../../store/store.ts';
+import { setLoading } from '../../../reducers/utilssSlice.ts';
 
-const OtpVerificationScreen: React.FC = () => {
+type OTPScreenRouteProp = RouteProp<AuthStackParamList, 'Otp'>;
+type OTPScreenNavigationProp = NavigationProp<AuthStackParamList, 'Otp'>
+type Props = {
+    route: OTPScreenRouteProp;
+    navigation : OTPScreenNavigationProp
+};
+
+
+const OtpVerificationScreen: React.FC<Props> = ({route, navigation}) => {
     const {colors} = useTheme();
-    const router = useNavigation();
+    const loading = useSelector((state: RootState) => state.utils.loading);
+    const dispatch = useDispatch();
+
     return (
+        <WrappedView isLoading={loading.active} loadingText={loading.message}>
         <SafeAreaView
             style={[
                 styles.container,
@@ -25,13 +42,12 @@ const OtpVerificationScreen: React.FC = () => {
                 },
             ]}>
             <ScrollView contentContainerStyle={{width: '100%'}}>
-                <Image source={images.scoiety1} style={styles.image} />
+                <Image source={images.img3} style={styles.image} />
                 <View style={[styles.titleContainer]}>
                     <Text h5 n700>
                         Manage. Connect. Live Better.
                     </Text>
                 </View>
-
                 <View
                     style={[
                         styles.wrapper,
@@ -43,40 +59,46 @@ const OtpVerificationScreen: React.FC = () => {
                         title="OTP Verification"
                         style={{marginVertical: 10}}
                     />
-                    <Text
-                        caption
-                        n400
-                        style={{textAlign: 'justify', marginVertical: 10}}>
-                        Please enter the verification code sent to your
-                        registered number.
-                    </Text>
+                    <View style={styles.box}>
+                        <Text caption n400>
+                            Enter OTP sent to you phone number
+                        </Text>
+                        <TouchableOpacity>
+                            <Text captionMedium blue500>
+                                Edit {route.params.phoneNumber}
+                            </Text>
+                        </TouchableOpacity>
+                    </View>
+
                     <OtpInput
                         numberOfDigits={6}
                         theme={{
                             focusedPinCodeContainerStyle: {
-                                borderColor: colors.blue600,
+                                borderColor: colors.primary,
                             },
                         }}
                         onTextChange={text => console.log(text)}
                     />
-                    <Button type="primary" style={{marginVertical: 24}}>
+                    <Button type="primary" style={{marginVertical: 24}}
+                            onPress={() => navigation.navigate('Register')}>
                         <Text base blue50>
-                            Send OTP
+                           Verify OTP
                         </Text>
                     </Button>
                 </View>
                 <View style={styles.bottomContainer}>
                     <Text caption n400>
-                        Edit phone number?{' '}
+                        Didn't receive code ?
                     </Text>
                     <TouchableOpacity>
                         <Text captionMedium blue500>
-                            Change phone number
+                            Resend
                         </Text>
                     </TouchableOpacity>
                 </View>
             </ScrollView>
         </SafeAreaView>
+        </WrappedView>
     );
 };
 
@@ -88,7 +110,7 @@ const styles = StyleSheet.create({
 
     titleContainer: {
         paddingHorizontal: 16,
-        marginTop: 64,
+        marginTop: 16,
         gap: 8,
     },
 
@@ -136,6 +158,14 @@ const styles = StyleSheet.create({
         height: 'auto',
 
         // height: 'auto',
+    },
+    box: {
+        padding: 16,
+        width: '100%',
+        flexDirection: 'row',
+        justifyContent: 'flex-start',
+        alignItems: 'center',
+        flexWrap: 'wrap',
     },
 });
 export default OtpVerificationScreen;

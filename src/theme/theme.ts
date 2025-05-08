@@ -111,7 +111,8 @@ export const spacing: Spacing = {
 };
 
 export const colors: Colors = {
-  background: '#F8FAFC',
+  primary: '#1FAD98',
+  background: '#F1F5F9',
   white: '#F8FAFC',
   black: '#030712',
   blue50: '#EFF6FF',
@@ -207,6 +208,12 @@ export const colors: Colors = {
 export const lightTheme: Theme = {
   colors: {
     ...colors,
+
+    background: '#F1F5F9',
+    primaryText: '#FFFFFF',
+    secondaryText: '#F4F4F4',
+    accentButton: '#FF6B6B',
+    highlightText: '#FFE066',
     n50: '#F8FAFC',
     n100: '#F1F5F9',
     n200: '#E2E8F0',
@@ -228,6 +235,10 @@ export const darkTheme: Theme = {
   colors: {
     ...colors,
     background: '#141718',
+    primaryText: '#FFFFFF',
+    secondaryText: '#F4F4F4',
+    accentButton: '#FF6B6B',
+    highlightText: '#FFE066',
     n50: '#030712',
     n100: '#0F172A',
     n200: '#1E293B',

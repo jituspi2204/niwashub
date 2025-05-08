@@ -12,7 +12,7 @@ const HeadingWithLine: React.FC<HeadingWithLineProps> = ({title, style}) => {
     return (
         <View style={[styles.container, style]}>
             <View style={[styles.line, {backgroundColor: colors.n400}]} />
-            <Text caption n400 style={{marginHorizontal: 10}}>
+            <Text base n400 style={{marginHorizontal: 10}}>
                 {title}
             </Text>
             <View style={[styles.line, {backgroundColor: colors.n400}]} />

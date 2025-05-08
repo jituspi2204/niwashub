@@ -2,7 +2,7 @@ import Icon from './Icon';
 import View from './View';
 import Text from './Text';
 import LoadingView from './LoadingView.tsx';
-import TextInput from './TextInput';
+import TextInput from './input/TextInput.tsx';
 import Button from './Button';
 import Header from './Header';
 import HeadingWithLine from './HeadingWithLine';
