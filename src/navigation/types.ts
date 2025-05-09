@@ -16,3 +16,10 @@ export type ProfileStackParamList = {
   Faq: undefined;
   PrivacyAndSecurity: undefined;
 };
+
+export type DashboardStackParamList = {
+  Home: undefined;
+  Statistics: undefined;
+  Budgets: undefined;
+  Settings: undefined;
+};

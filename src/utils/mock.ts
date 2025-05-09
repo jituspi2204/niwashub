@@ -87,6 +87,44 @@ const profileItems = [
   },
 ];
 
+const categories = [
+  {
+    id: 1,
+    name: 'Housing',
+    icon: 'home',
+  },
+  {
+    id: 2,
+    name: 'Communication',
+    icon: 'home',
+  },
+  {
+    id: 3,
+    name: 'Insurance',
+    icon: 'home',
+  },
+  {
+    id: 4,
+    name: 'Transportation',
+    icon: 'home',
+  },
+  {
+    id: 5,
+    name: 'Food and Dining',
+    icon: 'home',
+  },
+  {
+    id: 6,
+    name: 'Entertainment',
+    icon: 'home',
+  },
+  {
+    id: 7,
+    name: 'Health and Fitness',
+    icon: 'home',
+  },
+];
+
 const priorityQuestions = [
   {
     id: 1,
@@ -170,4 +208,5 @@ export default {
   priorityQuestions,
   faqs,
   onboarding,
+  categories,
 };

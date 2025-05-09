@@ -13,14 +13,6 @@ import { Text, View } from '../components';
 
 const AppNavigation: React.FC = () => {
   const theme = useTheme();
-  const auth = useSelector((state: RootState) => state.auth);
-  const dispatch = useDispatch();
-
-  useEffect(() => {
-    setTimeout(() => {
-      dispatch(logInUser(false));
-    }, 1000);
-  }, []);
 
   const toastConfig: ToastConfig = {
     success: props => (
@@ -73,13 +65,6 @@ const AppNavigation: React.FC = () => {
 
   return (
     <>
-      {auth.loading ? (
-        <LoadingView />
-      ) : auth.loggedIn ? (
-        <DashboardBottomTab />
-      ) : (
-        <AuthStack />
-      )}
       <StatusBar
         barStyle="dark-content"
         backgroundColor={theme.colors.background}

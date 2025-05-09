@@ -10,22 +10,26 @@ import PrivacyAndSecurityScreen from '../features/profile/screens/PrivacyAndSecu
 import FaqScreen from '../features/profile/screens/FaqScreen.tsx';
 import { Header } from '../components';
 import { colors } from '../theme/theme.ts';
+import ContactUsScreen from '../features/settings/screens/ContactUsScreen.tsx';
+import LanguageSettingScreen from '../features/settings/screens/LanguageSettingScreen.tsx';
+import SecurityScreen from '../features/settings/screens/SecurityScreen.tsx';
+import SettingsHomeScreen from '../features/settings/screens/SettingsHomeScreen.tsx';
 
 const getTitle = route => {
   switch (route) {
-    case 'ProfileHome':
-      return 'Profile ';
-    case 'MyAccount':
-      return 'My Account';
-    case 'Faq':
-      return 'FAQs';
-    case 'PrivacyAndSecurity':
-      return 'Privacy and Security';
+    case 'SettingsHome':
+      return 'Settings';
+    case 'LanguageSetting':
+      return 'Language settings';
+    case 'ContactUs':
+      return 'Contact Us';
+    case 'SecuritySetting':
+      return 'Security';
   }
 };
-const Stack = createNativeStackNavigator();
 
-const ProfileStack: React.FC = ({ navigation, route }) => {
+const Stack = createNativeStackNavigator();
+const SettingsStack: React.FC = () => {
   return (
     <Stack.Navigator
       screenOptions={{
@@ -40,20 +44,17 @@ const ProfileStack: React.FC = ({ navigation, route }) => {
         ),
       }}>
       <Stack.Screen
-        name="ProfileHome"
-        component={ProfileHomeScreen}
+        name="SettingsHome"
+        component={SettingsHomeScreen}
         options={{
-          headerTitle: 'Profile',
+          headerShown: false,
         }}
       />
-      <Stack.Screen name="MyAccount" component={MyAccountScreen} />
-      <Stack.Screen
-        name="PrivacyAndSecurity"
-        component={PrivacyAndSecurityScreen}
-      />
-      <Stack.Screen name="Faq" component={FaqScreen} />
+      <Stack.Screen name="LanguageSetting" component={LanguageSettingScreen} />
+      <Stack.Screen name="SecuritySetting" component={SecurityScreen} />
+      <Stack.Screen name="ContactUs" component={ContactUsScreen} />
     </Stack.Navigator>
   );
 };
 
-export default ProfileStack;
+export default SettingsStack;

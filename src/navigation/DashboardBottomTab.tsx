@@ -5,9 +5,11 @@ import { StatusBar, StyleSheet, TouchableOpacity } from 'react-native';
 import { Icon } from '../components';
 import { useTheme } from '../theme/ThemeContext.tsx';
 import HomeStack from './HomeStack.tsx';
+import SettingsStack from './SettingsStack.tsx';
+import { getFocusedRouteNameFromRoute } from '@react-navigation/native';
 
+const Tab = createBottomTabNavigator();
 const DashboardBottomTab: React.FC = () => {
-  const Tab = createBottomTabNavigator();
   const { colors } = useTheme();
   return (
     <Tab.Navigator
@@ -25,37 +27,78 @@ const DashboardBottomTab: React.FC = () => {
       <Tab.Screen
         name="Home"
         component={HomeStack}
-        options={{
-          tabBarIcon: ({ color, focused }) => (
-            <Icon name={focused ? 'homeBold' : 'home'} color={color} />
-          ),
+        options={({ route }) => {
+          const routeName = getFocusedRouteNameFromRoute(route) ?? 'HomeScreen';
+          return {
+            tabBarIcon: ({ color, focused }) => {
+              return (
+                <Icon name={focused ? 'homeBold' : 'home'} color={color} />
+              );
+            },
+            tabBarStyle:
+              routeName === 'HomeScreen'
+                ? [styles.tabBar, { backgroundColor: colors.n50 }]
+                : [{ display: 'none' }],
+          };
         }}
       />
       <Tab.Screen
-        name="Chat"
+        name="Statistics"
         component={HomeScreen}
-        options={{
-          tabBarIcon: ({ color, focused }) => (
-            <Icon name={focused ? 'graphBold' : 'graph'} color={color} />
-          ),
+        options={({ route }) => {
+          const routeName =
+            getFocusedRouteNameFromRoute(route) ?? 'StatisticsHome';
+          return {
+            tabBarIcon: ({ color, focused }) => {
+              return (
+                <Icon name={focused ? 'graphBold' : 'graph'} color={color} />
+              );
+            },
+            tabBarStyle:
+              routeName === 'StatisticsHome'
+                ? [styles.tabBar, { backgroundColor: colors.n50 }]
+                : [{ display: 'none' }],
+          };
+        }}
+      />
+      <Tab.Screen
+        name="Budgets"
+        component={HomeScreen}
+        options={({ route }) => {
+          const routeName = getFocusedRouteNameFromRoute(route) ?? 'BudgetHome';
+          return {
+            tabBarIcon: ({ color, focused }) => {
+              return (
+                <Icon name={focused ? 'graphBold' : 'graph'} color={color} />
+              );
+            },
+            tabBarStyle:
+              routeName === 'BudgetHome'
+                ? [styles.tabBar, { backgroundColor: colors.n50 }]
+                : [{ display: 'none' }],
+          };
         }}
       />
       <Tab.Screen
         name="Settings"
-        component={HomeScreen}
-        options={{
-          tabBarIcon: ({ color, focused }) => (
-            <Icon name={focused ? 'budgetsBold' : 'budgets'} color={color} />
-          ),
-        }}
-      />
-      <Tab.Screen
-        name="Account"
-        component={HomeScreen}
-        options={{
-          tabBarIcon: ({ color, focused }) => (
-            <Icon name={focused ? 'settingsBold' : 'settings'} color={color} />
-          ),
+        component={SettingsStack}
+        options={({ route }) => {
+          const routeName =
+            getFocusedRouteNameFromRoute(route) ?? 'SettingsHome';
+          return {
+            tabBarIcon: ({ color, focused }) => {
+              return (
+                <Icon
+                  name={focused ? 'settingsBold' : 'settings'}
+                  color={color}
+                />
+              );
+            },
+            tabBarStyle:
+              routeName === 'SettingsHome'
+                ? [styles.tabBar, { backgroundColor: colors.n50 }]
+                : [{ display: 'none' }],
+          };
         }}
       />
     </Tab.Navigator>
@@ -64,11 +107,10 @@ const DashboardBottomTab: React.FC = () => {
 
 const styles = StyleSheet.create({
   tabBar: {
-    height: 80,
-    borderTopLeftRadius: 15,
-    borderTopRightRadius: 15,
+    display: 'flex',
+    height: 70,
+    elevation: 0,
     borderTopWidth: 0,
-    elevation: 3,
   },
   tabBarItem: {
     alignSelf: 'center',
