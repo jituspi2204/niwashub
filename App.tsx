@@ -6,12 +6,12 @@ import { NavigationContainer } from '@react-navigation/native';
 import BootstrapProvider from './src/BootstrapProvider.tsx';
 import { useEffect } from 'react';
 import {GoogleSignin} from '@react-native-google-signin/google-signin';
-import { FIREBASE_WEB_API_KEY } from '@env';
+import { GOOGLE_WEB_CLIENT_ID } from '@env';
 
 const App: React.FC = () => {
   useEffect(() => {
     GoogleSignin.configure({
-      webClientId: FIREBASE_WEB_API_KEY,
+      webClientId: GOOGLE_WEB_CLIENT_ID,
     });
   }, []);
   return (

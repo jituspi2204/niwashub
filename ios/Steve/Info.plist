@@ -68,5 +68,24 @@
 		<string>Satoshi-Regular.ttf</string>
 		<string>SpaceMono-Regular.ttf</string>
 	</array>
+	<key>CFBundleURLTypes</key>
+    	<array>
+    		<dict>
+    			<key>CFBundleTypeRole</key>
+    			<string>Editor</string>
+    			<key>CFBundleURLSchemes</key>
+    			<array>
+    				<string>org.finchmoneyai</string>
+    			</array>
+    		</dict>
+    		<dict>
+    			<key>CFBundleTypeRole</key>
+    			<string>Editor</string>
+    			<key>CFBundleURLSchemes</key>
+    			<array>
+    				<string>com.googleusercontent.apps.18457082613-vo89tta08fmrilj057ccrfdib7he55nv</string>
+    			</array>
+    		</dict>
+    	</array>
 </dict>
 </plist>
