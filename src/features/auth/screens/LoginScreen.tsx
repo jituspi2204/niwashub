@@ -1,6 +1,5 @@
 import React from 'react';
 import {
-  Dimensions,
   Image,
   SafeAreaView,
   ScrollView,
@@ -13,7 +12,6 @@ import {
   HeadingWithLine,
   Icon,
   Text,
-  TextInput,
   View,
 } from '../../../components';
 import { useNavigation } from '@react-navigation/native';
@@ -21,10 +19,11 @@ import { images } from '../../../utils';
 import WrappedView from '../../../components/WrappedView.tsx';
 import Toast from 'react-native-toast-message';
 import { PhoneInput } from '../../../components/input';
-import { LoadingProps } from '../../../types/types.ts';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../../store/store.ts';
 import { setLoading } from '../../../reducers/utilssSlice.ts';
+import auth from '@react-native-firebase/auth';
+import { GoogleSignin } from '@react-native-google-signin/google-signin';
 
 const LoginScreen: React.FC = ({}) => {
   const { colors } = useTheme();
@@ -52,6 +51,22 @@ const LoginScreen: React.FC = ({}) => {
       navigation.navigate('Otp', { phoneNumber });
       dispatch(setLoading({ active: false, message: '' }));
     }, 1000);
+  };
+
+  const signInWithGoogle = async () => {
+    try {
+      dispatch(setLoading({ active: true, message: 'Signing in with Google...' }));
+      const  idToken  = await GoogleSignin.signIn();
+      const googleCredential = auth.GoogleAuthProvider.credential(idToken.data?.idToken!);
+      await auth().signInWithCredential(googleCredential);
+      dispatch(setLoading({ active: false, message: '' }));
+      Toast.show({ type: 'success', text1: 'Signed in with Google' });
+      // navigate to your home/dashboard screen here
+    } catch (error) {
+      dispatch(setLoading({ active: false, message: '' }));
+      console.error(error);
+      Toast.show({ type: 'error', text1: 'Google sign-in failed' });
+    }
   };
 
   return (
@@ -103,7 +118,7 @@ const LoginScreen: React.FC = ({}) => {
               style={{ marginVertical: 20 }}
             />
             <View style={[styles.socialButtons]}>
-              <Button type="secondary" style={styles.socialButton}>
+              <Button type="secondary" style={styles.socialButton} onPress={signInWithGoogle}>
                 <Icon name="google" size={24} />
                 <Text base n700>
                   Google

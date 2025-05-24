@@ -1,5 +1,4 @@
 import React, { useEffect } from 'react';
-import AppNavigation from './navigation/AppNavigation.tsx';
 import { bootstrapApi } from './api';
 import { setBudgetCategories } from './reducers/bootstrapDataSlice.ts';
 import { useDispatch, useSelector } from 'react-redux';
@@ -24,7 +23,7 @@ const BootstrapProvider: React.FC = () => {
     let startup = async () => {
       let data = await bootstrapApi.loadAppStartupData();
       dispatch(setBudgetCategories(data.budgetCategories));
-      dispatch(logInUser(true));
+      // dispatch(logInUser(true));
     };
     startup().then(() => {
       dispatch(setLoading({ active: false, message: '' }));
