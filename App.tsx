@@ -6,12 +6,14 @@ import { NavigationContainer } from '@react-navigation/native';
 import BootstrapProvider from './src/BootstrapProvider.tsx';
 import { useEffect } from 'react';
 import {GoogleSignin} from '@react-native-google-signin/google-signin';
-import { GOOGLE_WEB_CLIENT_ID } from '@env';
+import {Platform} from 'react-native';
+import { GOOGLE_WEB_CLIENT_ID_IOS, GOOGLE_WEB_CLIENT_ID_ANDROID } from './env';
+
 
 const App: React.FC = () => {
   useEffect(() => {
     GoogleSignin.configure({
-      webClientId: GOOGLE_WEB_CLIENT_ID,
+      webClientId: Platform.OS === 'ios' ? GOOGLE_WEB_CLIENT_ID_IOS : GOOGLE_WEB_CLIENT_ID_ANDROID,
     });
   }, []);
   return (

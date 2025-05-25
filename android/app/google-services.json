@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "18457082613",
+    "project_id": "finchmoney-ai-2ae5b",
+    "storage_bucket": "finchmoney-ai-2ae5b.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:18457082613:android:80630b2316c3809918e3bc",
+        "android_client_info": {
+          "package_name": "com.finchmoney.ai"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "18457082613-ie4emf9f1uq1trrvrjshf2c952i5n366.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD7f2FiizNGPXlYFgG2dhI8LTSDx49TiyU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "18457082613-ie4emf9f1uq1trrvrjshf2c952i5n366.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "18457082613-4l95q5094mkt5r9skrd88ko18e3i2559.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "org.finchmoney-ai"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

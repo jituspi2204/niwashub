@@ -6,7 +6,6 @@
         <item name="android:navigationBarColor">#F1F5F9</item> <!-- Navigation bar color -->
         <item name="android:statusBarColor">#F1F5F9</item>
         <item name="android:windowFullscreen">true</item>
-        <item name="android:windowLightNavigationBar">true</item>
 <!--        <item name="android:editTextBackground">@drawable/rn_edit_text_material</item>-->
     </style>
 
