@@ -7,7 +7,7 @@ import BootstrapProvider from './src/BootstrapProvider.tsx';
 import { useEffect } from 'react';
 import {GoogleSignin} from '@react-native-google-signin/google-signin';
 import {Platform} from 'react-native';
-import { GOOGLE_WEB_CLIENT_ID_IOS, GOOGLE_WEB_CLIENT_ID_ANDROID } from './env';
+import { GOOGLE_WEB_CLIENT_ID_IOS, GOOGLE_WEB_CLIENT_ID_ANDROID } from '@env';
 
 
 const App: React.FC = () => {
