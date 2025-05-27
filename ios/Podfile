@@ -16,6 +16,8 @@ end
 
 target 'Steve' do
   config = use_native_modules!
+  use_frameworks! :linkage => :static
+  $RNFirebaseAsStaticFramework = true
 
   use_react_native!(
     :path => config[:reactNativePath],
@@ -33,3 +35,5 @@ target 'Steve' do
     )
   end
 end
+
+

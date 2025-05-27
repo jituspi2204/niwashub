@@ -1,14 +1,29 @@
 import React from 'react';
-import { Image, ScrollView, StyleSheet } from 'react-native';
+import { Image, ScrollView, StyleSheet, TouchableOpacity } from 'react-native';
 import { Text, TextInput, View } from '../../../components';
 import { useTheme } from '../../../theme/ThemeContext.tsx';
 import { avatars } from '../../../utils/images.ts';
 import Toast from 'react-native-toast-message';
 import ListItem from '../components/ListItem.tsx';
 import mock from '../../../utils/mock.ts';
-
+import { useDispatch, useSelector } from 'react-redux';
+import { logoutUser } from '../../auth/authSlice.ts';
+import { getAuth, signOut } from '@react-native-firebase/auth';
+import { RootState } from '../../../store/store.ts';
+import { setLoading } from '../../../reducers/utilssSlice.ts';
+import { GoogleSignin } from '@react-native-google-signin/google-signin';
 const ProfileHomeScreen: React.FC = ({ profileItems = mock.profileItems }) => {
   const { colors } = useTheme();
+  const dispatch = useDispatch();
+  // const loading = useSelector((state: RootState) => state.utils.loading);
+  const logoutHandler = async () => {
+    dispatch(setLoading({ active: true, message: 'Logging out...' }));
+    await GoogleSignin.revokeAccess();
+    await GoogleSignin.signOut();
+    signOut(getAuth()).then(() => {
+      dispatch(setLoading({ active: false, message: '' }));
+    });
+  };
   return (
     <View
       safe
@@ -75,6 +90,19 @@ const ProfileHomeScreen: React.FC = ({ profileItems = mock.profileItems }) => {
             />
           ))}
         </View>
+
+        <TouchableOpacity
+          style={[
+            styles.wrapper,
+            {
+              backgroundColor: colors.n50,
+            },
+          ]}
+          onPress={logoutHandler}>
+          <Text base n700 style={{ marginLeft: 16 }}>
+            Logout
+          </Text>
+        </TouchableOpacity>
       </ScrollView>
     </View>
   );

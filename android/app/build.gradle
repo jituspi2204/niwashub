@@ -1,6 +1,9 @@
-apply plugin: "com.android.application"
-apply plugin: "org.jetbrains.kotlin.android"
-apply plugin: "com.facebook.react"
+plugins {
+    id("com.android.application")
+    id("org.jetbrains.kotlin.android")
+    id("com.facebook.react")
+    id ("com.google.gms.google-services")
+}
 
 apply from: file("../../node_modules/react-native-vector-icons/fonts.gradle")
 
@@ -72,20 +75,34 @@ def enableProguardInReleaseBuilds = false
  * give correct results when using with locales other than en-US. Note that
  * this variant is about 6MiB larger per architecture than default.
  */
-def jscFlavor = 'io.github.react-native-community:jsc-android:2026004.+'
+def jscFlavor = 'io.github.react-native-community:jsc-android:2026004.0'
 
 android {
-    ndkVersion rootProject.ext.ndkVersion
-    buildToolsVersion rootProject.ext.buildToolsVersion
-    compileSdk rootProject.ext.compileSdkVersion
+    ndkVersion = rootProject.ext.ndkVersion
+    buildToolsVersion = rootProject.ext.buildToolsVersion
+    compileSdk = rootProject.ext.compileSdkVersion
 
-    namespace "com.steve"
+    namespace "com.finchmoney.ai"
+
+    externalNativeBuild {
+    // to suppress the $ warnings while cmake stages
+        cmake {
+            path "CMakeLists.txt"
+            version "3.22.1"
+        }
+    }
+
     defaultConfig {
-        applicationId "com.steve"
+        applicationId "com.finchmoney.ai"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
         versionName "1.0"
+        externalNativeBuild {
+            cmake {
+                cppFlags "-std=c++20 -Wno-dollar-in-identifier-extension"
+            }
+        }
     }
     signingConfigs {
         debug {
@@ -108,7 +125,6 @@ android {
         }
     }
 }
-
 dependencies {
     // The version of react-native is set by the React Native Gradle Plugin
     implementation("com.facebook.react:react-android")
@@ -118,4 +134,15 @@ dependencies {
     } else {
         implementation jscFlavor
     }
+    implementation(platform("com.google.firebase:firebase-bom:33.14.0"))
+    implementation("com.google.firebase:firebase-analytics")
+}
+
+afterEvaluate {
+    def fontTask = tasks.findByName("copyReactNativeVectorIconFonts")
+        if (fontTask != null) {
+            tasks.matching { it.name.contains("Lint") || it.name.contains("lint") }.all {
+                it.dependsOn fontTask
+            }
+        }
 }
