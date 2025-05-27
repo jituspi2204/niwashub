@@ -7,13 +7,7 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import { useTheme } from '../../../theme/ThemeContext.tsx';
-import {
-  Button,
-  HeadingWithLine,
-  Icon,
-  Text,
-  View,
-} from '../../../components';
+import { Button, HeadingWithLine, Icon, Text, View } from '../../../components';
 import { useNavigation } from '@react-navigation/native';
 import { images } from '../../../utils';
 import WrappedView from '../../../components/WrappedView.tsx';
@@ -55,16 +49,21 @@ const LoginScreen: React.FC = ({}) => {
 
   const signInWithGoogle = async () => {
     try {
-      dispatch(setLoading({ active: true, message: 'Signing in with Google...' }));
-      const  idToken  = await GoogleSignin.signIn();
-      const googleCredential = auth.GoogleAuthProvider.credential(idToken.data?.idToken!);
+      dispatch(
+        setLoading({ active: true, message: 'Signing in with Google...' }),
+      );
+      const idToken = await GoogleSignin.signIn();
+      console.log('idToken : ', idToken);
+      const googleCredential = auth.GoogleAuthProvider.credential(
+        idToken.data?.idToken!,
+      );
       await auth().signInWithCredential(googleCredential);
       dispatch(setLoading({ active: false, message: '' }));
       Toast.show({ type: 'success', text1: 'Signed in with Google' });
       // navigate to your home/dashboard screen here
     } catch (error) {
+      console.log('error : ', error);
       dispatch(setLoading({ active: false, message: '' }));
-      console.error(error);
       Toast.show({ type: 'error', text1: 'Google sign-in failed' });
     }
   };
@@ -118,7 +117,10 @@ const LoginScreen: React.FC = ({}) => {
               style={{ marginVertical: 20 }}
             />
             <View style={[styles.socialButtons]}>
-              <Button type="secondary" style={styles.socialButton} onPress={signInWithGoogle}>
+              <Button
+                type="secondary"
+                style={styles.socialButton}
+                onPress={signInWithGoogle}>
                 <Icon name="google" size={24} />
                 <Text base n700>
                   Google

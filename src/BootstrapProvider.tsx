@@ -9,13 +9,26 @@ import AuthStack from './navigation/AuthStack.tsx';
 import { RootState } from './store/store.ts';
 import { useTheme } from './theme/ThemeContext.tsx';
 import { StatusBar } from 'react-native';
-import { logInUser } from './features/auth/authSlice.ts';
+import { logInUser, logoutUser } from './features/auth/authSlice.ts';
+import { getAuth, onAuthStateChanged } from '@react-native-firebase/auth';
 
 const BootstrapProvider: React.FC = () => {
   const dispatch = useDispatch();
   const { colors } = useTheme();
   const auth = useSelector((state: RootState) => state.auth);
   const loading = useSelector((state: RootState) => state.utils.loading);
+
+  function handleAuthStateChanged(user: any) {
+    if (user) {
+      dispatch(logInUser(user));
+    } else {
+      dispatch(logoutUser());
+    }
+    if (loading?.active) {
+      dispatch(setLoading({ active: false, message: '' }));
+    }
+  }
+
   useEffect(() => {
     dispatch(
       setLoading({ active: true, message: 'initializing app for you...' }),
@@ -28,6 +41,8 @@ const BootstrapProvider: React.FC = () => {
     startup().then(() => {
       dispatch(setLoading({ active: false, message: '' }));
     });
+    const subscriber = onAuthStateChanged(getAuth(), handleAuthStateChanged);
+    return subscriber; // unsubscribe on unmount
   }, []);
   return (
     <>
