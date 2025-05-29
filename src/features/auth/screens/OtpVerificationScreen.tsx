@@ -25,7 +25,6 @@ import { logInUser } from '../authSlice';
 import { useRoute, useNavigation } from '@react-navigation/native';
 
 const OtpVerificationScreen: React.FC = () => {
-  console.log('OtpVerificationScreen');
   const route = useRoute<RouteProp<AuthStackParamList, 'Otp'>>();
   const navigation = useNavigation<NavigationProp<AuthStackParamList, 'Otp'>>();
   const { colors } = useTheme();
