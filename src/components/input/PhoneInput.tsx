@@ -66,7 +66,7 @@ const PhoneInput: React.FC<Props> = ({ style, ...props}) => {
                 onChangeText={val => {
                     setValue(val);
                     // @ts-ignore
-                    props.onChangeText(activeCode.code + value);
+                    props.onChangeText(activeCode.code + val);
                 }}
                 keyboardType="numeric"
             />

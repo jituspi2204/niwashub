@@ -1,6 +1,10 @@
 export type AuthStackParamList = {
   Login: undefined;
-  Otp: { phoneNumber: string };
+  Otp: {
+    phoneNumber: string;
+    verificationId: string;
+    isEmulator?: boolean;
+  };
   Register: undefined;
 };
 

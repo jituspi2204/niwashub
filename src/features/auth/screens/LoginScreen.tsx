@@ -8,7 +8,7 @@ import {
 } from 'react-native';
 import { useTheme } from '../../../theme/ThemeContext.tsx';
 import { Button, HeadingWithLine, Icon, Text, View } from '../../../components';
-import { useNavigation } from '@react-navigation/native';
+import { NavigationProp, useNavigation } from '@react-navigation/native';
 import { images } from '../../../utils';
 import WrappedView from '../../../components/WrappedView.tsx';
 import Toast from 'react-native-toast-message';
@@ -18,10 +18,12 @@ import { RootState } from '../../../store/store.ts';
 import { setLoading } from '../../../reducers/utilssSlice.ts';
 import auth from '@react-native-firebase/auth';
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
+import DeviceInfo from 'react-native-device-info';
+import { AuthStackParamList } from '../../../navigation/types.ts';
 
 const LoginScreen: React.FC = ({}) => {
   const { colors } = useTheme();
-  const navigation = useNavigation();
+  const navigation = useNavigation<NavigationProp<AuthStackParamList>>();
   const [phoneNumber, setPhoneNumber] = React.useState<string>('');
   const loading = useSelector((state: RootState) => state.utils.loading);
   const dispatch = useDispatch();
@@ -29,22 +31,76 @@ const LoginScreen: React.FC = ({}) => {
     setPhoneNumber(value);
   };
 
-  const sendOtpHandler = () => {
-    // if (!/^\s+$/.test(phoneNumber)) {
-    //     Toast.show({
-    //         type: 'error',
-    //         text1: 'Invalid phone number',
-    //     });
-    //     return;
-    // }
-    // setLoading({loading: true, text: 'sending OTP ...'});
-    dispatch(
-      setLoading({ active: true, message: 'hold on, we are sending otp' }),
-    );
-    setTimeout(() => {
-      navigation.navigate('Otp', { phoneNumber });
+  const sendOtpHandler = async () => {
+    // Validate phone number
+    if (!phoneNumber || phoneNumber.length < 8) {
+      Toast.show({
+        type: 'error',
+        text1: 'Please enter a valid phone number',
+      });
+      return;
+    }
+    console.log('phoneNumber : ', phoneNumber);
+
+    try {
+      dispatch(
+        setLoading({ active: true, message: 'Sending OTP...' })
+      );
+
+      // Check if running on emulator
+      const emulator = DeviceInfo.isEmulatorSync();
+
+      if (emulator) {
+        console.log('Running on emulator, using mock verification');
+
+        // For emulators, create a mock verification ID
+        try {
+          console.log('Navigating to Otp with:', {
+            phoneNumber,
+            verificationId: 'emulator-verification-id',
+            isEmulator: true,
+          });
+          navigation.navigate('Otp', {
+            phoneNumber,
+            verificationId: 'emulator-verification-id',
+            isEmulator: true,
+          });
+        } catch (error) {
+          console.error('Navigation error:', error);
+        }
+
+
+        dispatch(setLoading({ active: false, message: '' }));
+        Toast.show({
+          type: 'success',
+          text1: 'Emulator detected. Use 123456 or 1234 as OTP for testing.',
+        });
+        return;
+      }
+
+      // Request OTP verification for real devices
+      const confirmation = await auth().signInWithPhoneNumber(phoneNumber);
+
+      // Store confirmation in state management or pass to OTP screen
+      navigation.navigate('Otp', {
+        phoneNumber,
+        verificationId: confirmation.verificationId,
+        isEmulator: false,
+      });
+
       dispatch(setLoading({ active: false, message: '' }));
-    }, 1000);
+      Toast.show({
+        type: 'success',
+        text1: 'OTP sent successfully',
+      });
+    } catch (error) {
+      console.error('Error sending OTP:', error);
+      dispatch(setLoading({ active: false, message: '' }));
+      Toast.show({
+        type: 'error',
+        text1: 'Failed to send OTP. Please try again.',
+      });
+    }
   };
 
   const signInWithGoogle = async () => {
