@@ -9,28 +9,38 @@ import {
 } from 'react-native';
 import {useTheme} from '../theme/ThemeContext';
 import {LoadingView} from './index.ts';
+import OverlayLoader from './loaders/OverlayLoader.tsx';
+
+
 
 type CustomViewProps = ViewProps & {
     children?: React.ReactNode;
     isLoading?: boolean;
     loadingText?: string;
+    loadingStyle?: 'overlay' | null | undefined | boolean;
 };
 
 export default function WrappedView({
     children,
     isLoading = false,
     loadingText,
+  loadingStyle = null,
 }: CustomViewProps) {
     const {colors} = useTheme();
 
     return (
         <>
-            {isLoading && (
-                <SafeAreaView style={styles.container}>
-                    <LoadingView loadingText={loadingText} />
-                </SafeAreaView>
-            )}
-            {children}
+          {isLoading ? (
+            loadingStyle === 'overlay' ? (
+              <OverlayLoader loading={true} children={children} />
+            ) : (
+              <SafeAreaView style={styles.container}>
+                <LoadingView loadingText={loadingText} />
+              </SafeAreaView>
+            )
+          ) : (
+            children
+          )}
         </>
     );
 }

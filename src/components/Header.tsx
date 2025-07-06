@@ -1,11 +1,12 @@
+import { useNavigation } from '@react-navigation/native';
 import React from 'react';
 import { Image, StyleSheet, TouchableOpacity, ViewStyle } from 'react-native';
-import Text from './Text';
-import View from './View';
-import Icon from './Icon';
+import FeatherIcon from 'react-native-vector-icons/Feather';
 import { useTheme } from '../theme/ThemeContext';
-import { avatars } from '../utils/images.ts';
-import { useNavigation } from '@react-navigation/native';
+import Icon from './Icon';
+import Text from './common/Text.tsx';
+import View from './common/View.tsx';
+import { images } from '../utils';
 
 type HeaderProps = {
   type: 'main' | 'secondary' | 'single';
@@ -37,23 +38,36 @@ export default function Header({ type, title, onPress, style }: HeaderProps) {
           <View style={styles.titleContainer}>
             <TouchableOpacity
               style={[
-                styles.avatarContainer,
+                styles.flatContainer,
                 {
-                  borderColor: colors.blue50,
+                  backgroundColor: colors.subBackground,
                 },
               ]}
               onPress={() => navigation.navigate('Profile')}>
-              <Image source={avatars.indianMan} style={styles.avatar} />
+              <Image
+                source={images.house3d}
+                width={30}
+                height={30}
+                resizeMode="contain"
+                resizeMethod="auto"
+                style={{ width: 50, height: 50 }}
+              />
+              <View>
+                <Text n800 base>
+                  F6/B
+                </Text>
+                <Text n600 base2Medium>
+                  Aditya Apartments
+                </Text>
+              </View>
+              <View style={[styles.downIcon, { borderColor: colors.n400 }]}>
+                <FeatherIcon
+                  name="chevron-down"
+                  size={30}
+                  color={colors.n700}
+                />
+              </View>
             </TouchableOpacity>
-
-            <View>
-              <Text n400 base>
-                Hello, Eleyas
-              </Text>
-              <Text n700 h6>
-                Welcome back!
-              </Text>
-            </View>
           </View>
 
           <View
@@ -78,6 +92,7 @@ export default function Header({ type, title, onPress, style }: HeaderProps) {
               flexDirection: 'row',
               justifyContent: 'space-between',
               alignItems: 'center',
+              paddingHorizontal: 16,
             },
             style,
           ]}>
@@ -114,24 +129,22 @@ export default function Header({ type, title, onPress, style }: HeaderProps) {
 
 const styles = StyleSheet.create({
   container: {
-    paddingTop: 16,
-    paddingBottom: 16,
-    paddingHorizontal: 16,
+    paddingVertical: 16,
   },
   titleContainer: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 12,
   },
-  avatarContainer: {
-    width: 44,
-    height: 44,
+  flatContainer: {
+    display: 'flex',
+    flexDirection: 'row',
     borderRadius: 22,
     overflow: 'hidden',
-    justifyContent: 'center',
+    justifyContent: 'space-between',
     alignItems: 'center',
-    backgroundColor: '#FBE7CB',
-    borderWidth: 1.5,
+    paddingHorizontal: 16,
+    paddingVertical: 6,
   },
   avatar: {
     width: 44,
@@ -144,5 +157,11 @@ const styles = StyleSheet.create({
     borderRadius: 22,
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  downIcon: {
+    marginLeft: 12,
+    padding: 2,
+    borderRadius: 100,
+    borderWidth: 0.5,
   },
 });

@@ -3,7 +3,6 @@ import { Image, ScrollView, StyleSheet } from 'react-native';
 import { Text, TextInput, View } from '../../../components';
 import { useTheme } from '../../../theme/ThemeContext.tsx';
 import { avatars } from '../../../utils/images.ts';
-import Toast from 'react-native-toast-message';
 
 const MyAccountScreen: React.FC = () => {
   const { colors } = useTheme();
@@ -13,7 +12,7 @@ const MyAccountScreen: React.FC = () => {
       style={[
         styles.container,
         {
-          backgroundColor: colors.n100,
+          backgroundColor: colors.background,
         },
       ]}>
       <ScrollView>
@@ -22,7 +21,7 @@ const MyAccountScreen: React.FC = () => {
             style={[
               styles.avatarContainer,
               {
-                borderColor: colors.blue50,
+                borderColor: colors.subBackground,
               },
             ]}>
             <Image source={avatars.indianMan} style={styles.avatar} />

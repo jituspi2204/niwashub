@@ -1,15 +1,13 @@
 import React from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-
-import AddIncomeScreen from '../features/cashflow/screens/AddIncomeScreen.tsx';
-import RecentTransactionsScreen from '../features/cashflow/screens/RecentTransactionsScreen.tsx';
-import AddBillScreen from '../features/cashflow/screens/AddBillScreen.tsx';
 import ProfileHomeScreen from '../features/profile/screens/ProfileHomeScreen.tsx';
 import MyAccountScreen from '../features/profile/screens/MyAccountScreen.tsx';
 import PrivacyAndSecurityScreen from '../features/profile/screens/PrivacyAndSecurityScreen.tsx';
 import FaqScreen from '../features/profile/screens/FaqScreen.tsx';
 import { Header } from '../components';
-import { colors } from '../theme/theme.ts';
+import { useTheme } from '../theme/ThemeContext.tsx';
+import FlatsScreen from '../features/profile/screens/FlatsScreen.js.tsx';
+import NotificationSettingScreen from '../features/profile/screens/NotificationSettingScreen.tsx';
 
 const getTitle = route => {
   switch (route) {
@@ -21,11 +19,16 @@ const getTitle = route => {
       return 'FAQs';
     case 'PrivacyAndSecurity':
       return 'Privacy and Security';
+    case 'NotificationSetting':
+      return 'Notification Settings';
+    case 'MyFlats':
+      return 'My Flats';
   }
 };
 const Stack = createNativeStackNavigator();
 
 const ProfileStack: React.FC = ({ navigation, route }) => {
+  const { colors } = useTheme();
   return (
     <Stack.Navigator
       screenOptions={{
@@ -43,10 +46,15 @@ const ProfileStack: React.FC = ({ navigation, route }) => {
         name="ProfileHome"
         component={ProfileHomeScreen}
         options={{
-          headerTitle: 'Profile',
+          headerShown: false,
         }}
       />
-      <Stack.Screen name="MyAccount" component={MyAccountScreen} />
+      <Stack.Screen name="MyProfile" component={MyAccountScreen} />
+      <Stack.Screen name="MyFlats" component={FlatsScreen} />
+      <Stack.Screen
+        name="NotificationSetting"
+        component={NotificationSettingScreen}
+      />
       <Stack.Screen
         name="PrivacyAndSecurity"
         component={PrivacyAndSecurityScreen}

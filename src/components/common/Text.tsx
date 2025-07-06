@@ -1,12 +1,12 @@
 import React from 'react';
 import {
-  Text as DefaultText,
-  StyleSheet,
-  TextProps,
   StyleProp,
+  StyleSheet,
+  Text as DefaultText,
+  TextProps,
   TextStyle,
 } from 'react-native';
-import { useTheme } from '../theme/ThemeContext';
+import { useTheme } from '../../theme/ThemeContext.tsx';
 
 // Define custom props for typography and color options
 type TextVariantProps = {
@@ -38,6 +38,7 @@ type TextVariantProps = {
   blue800?: boolean;
   blue900?: boolean;
   blue950?: boolean;
+  primary?: boolean;
 
   n50?: boolean;
   n100?: boolean;
@@ -54,56 +55,57 @@ type TextVariantProps = {
 
 type CustomTextProps = TextProps &
   TextVariantProps & {
-  children?: React.ReactNode;
-  style?: StyleProp<TextStyle>;
-};
+    children?: React.ReactNode;
+    style?: StyleProp<TextStyle>;
+  };
 
 export default function Text({
-                               h1,
-                               h2,
-                               h3,
-                               h4,
-                               h5,
-                               h6,
-                               body,
-                               body2,
-                               base,
-                               base2,
-                               base2Medium,
-                               caption,
-                               captionMedium,
-                               caption2,
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6,
+  body,
+  body2,
+  base,
+  base2,
+  base2Medium,
+  caption,
+  captionMedium,
+  caption2,
 
-                               white,
-                               black,
-                               blue50,
-                               blue100,
-                               blue200,
-                               blue300,
-                               blue400,
-                               blue500,
-                               blue600,
-                               blue700,
-                               blue800,
-                               blue900,
-                               blue950,
+  white,
+  black,
+  blue50,
+  blue100,
+  blue200,
+  blue300,
+  blue400,
+  blue500,
+  blue600,
+  blue700,
+  blue800,
+  blue900,
+  blue950,
+  primary,
 
-                               n50,
-                               n100,
-                               n200,
-                               n300,
-                               n400,
-                               n500,
-                               n600,
-                               n700,
-                               n800,
-                               n900,
-                               n950,
+  n50,
+  n100,
+  n200,
+  n300,
+  n400,
+  n500,
+  n600,
+  n700,
+  n800,
+  n900,
+  n950,
 
-                               children,
-                               style,
-                               ...props
-                             }: CustomTextProps) {
+  children,
+  style,
+  ...props
+}: CustomTextProps) {
   const { fonts, colors } = useTheme();
 
   const styles = StyleSheet.flatten([
@@ -135,6 +137,7 @@ export default function Text({
     blue800 && { color: colors.blue800 },
     blue900 && { color: colors.blue900 },
     blue950 && { color: colors.blue950 },
+    primary && { color: colors.primary },
 
     n50 && { color: colors.n50 },
     n100 && { color: colors.n100 },
@@ -157,8 +160,7 @@ export default function Text({
       {...props}
       allowFontScaling={true}
       adjustsFontSizeToFit={false}
-      maxFontSizeMultiplier={1.2}
-    >
+      maxFontSizeMultiplier={1.2}>
       {children}
     </DefaultText>
   );

@@ -1,18 +1,18 @@
-import Icon from './Icon';
-import View from './View';
-import Text from './Text';
-import LoadingView from './LoadingView.tsx';
-import TextInput from './input/TextInput.tsx';
 import Button from './Button';
 import Header from './Header';
 import HeadingWithLine from './HeadingWithLine';
+import Icon from './Icon';
+import LoadingView from './LoadingView.tsx';
+import Text from './common/Text.tsx';
+import View from './common/View.tsx';
+import TextInput from './input/TextInput.tsx';
 export {
-    Icon,
-    View,
-    Text,
-    LoadingView,
-    TextInput,
-    Button,
-    Header,
-    HeadingWithLine,
+  Button,
+  Header,
+  HeadingWithLine,
+  Icon,
+  LoadingView,
+  Text,
+  TextInput,
+  View,
 };

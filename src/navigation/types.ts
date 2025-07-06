@@ -1,11 +1,21 @@
+import { UserTypes } from "../types";
+
 export type AuthStackParamList = {
   Login: undefined;
   Otp: {
     phoneNumber: string;
     verificationId: string;
     isEmulator?: boolean;
+    otpFor: 'REGISTER' | 'FORGOT_PASSWORD';
   };
-  Register: undefined;
+  Register: {
+    registrationToken: string;
+  };
+  UserFlats : {
+    loginToken : string,
+    userDetails : any
+  }
+  
 };
 
 export type IncomeStackParamList = {

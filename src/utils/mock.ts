@@ -1,5 +1,3 @@
-import images from './images';
-
 const general = [
   {
     id: 1,
@@ -70,17 +68,35 @@ const profileItems = [
   {
     id: 1,
     icon: 'profile',
-    title: 'My account',
-    link: 'MyAccount',
+    title: 'My Profile',
+    link: 'MyProfile',
   },
   {
-    id: 1,
+    id: 2,
+    icon: 'flat',
+    title: 'My Flats',
+    link: 'MyProfile',
+  },
+  {
+    id: 2,
+    icon: 'flat',
+    title: 'Notification Settings',
+    link: 'MyProfile',
+  },
+  {
+    id: 2,
+    icon: 'flat',
+    title: 'Privacy Settings',
+    link: 'MyProfile',
+  },
+  {
+    id: 3,
     icon: 'bell',
     title: 'Help center',
     link: 'Faq',
   },
   {
-    id: 1,
+    id: 4,
     icon: 'shield',
     title: 'Privacy & Security',
     link: 'PrivacyAndSecurity',
@@ -200,6 +216,115 @@ const onboarding = [
   },
 ];
 
+const admin = [
+  {
+    society_name: 'Greenwood Residency',
+    block_no: 'A',
+    flat_no: '101',
+  },
+  {
+    society_name: 'Sunshine Apartments',
+    block_no: 'B',
+    flat_no: '202',
+  },
+];
+
+const resident = [
+  {
+    society_name: 'Palm Grove Villas',
+    block_no: 'C',
+    flat_no: '305',
+  },
+  {
+    society_name: 'Sunshine Apartments',
+    block_no: 'B',
+    flat_no: '203',
+  },
+  {
+    society_name: 'Greenwood Residency',
+    block_no: 'A',
+    flat_no: '101',
+  },
+  {
+    society_name: 'Sunshine Apartments',
+    block_no: 'B',
+    flat_no: '202',
+  },
+];
+
+const visitors = [
+  {
+    guestName: 'Ravi Sharma',
+    date: '2025-06-01',
+    purpose: 'Delivery',
+    phoneNumber: '9876543210',
+    status: 'completed',
+  },
+  {
+    guestName: 'Anita Desai',
+    date: '2025-06-01',
+    purpose: 'Personal Visit',
+    phoneNumber: '9123456780',
+    status: 'completed',
+  },
+  {
+    guestName: 'Amit Verma',
+    date: '2025-06-02',
+    purpose: 'Maintenance',
+    phoneNumber: '9012345678',
+    status: 'cancelled',
+  },
+  {
+    guestName: 'Sunita Joshi',
+    date: '2025-06-02',
+    purpose: 'Courier',
+    phoneNumber: '9988776655',
+    status: 'completed',
+  },
+  {
+    guestName: 'Karan Mehta',
+    date: '2025-06-02',
+    purpose: 'Guest Visit',
+    phoneNumber: '9090909090',
+    status: 'completed',
+  },
+  {
+    guestName: 'Deepak Singh',
+    date: '2025-06-03',
+    purpose: 'Electrician',
+    phoneNumber: '9191919191',
+    status: 'upcoming',
+  },
+  {
+    guestName: 'Priya Kumar',
+    date: '2025-06-03',
+    purpose: 'Maid Interview',
+    phoneNumber: '8888888888',
+    status: 'upcoming',
+  },
+  {
+    guestName: 'Vikram Chauhan',
+    date: '2025-06-03',
+    purpose: 'Security Audit',
+    phoneNumber: '7777777777',
+    status: 'upcoming',
+  },
+  {
+    guestName: 'Neha Bhatia',
+    date: '2025-06-04',
+    purpose: 'Friend Visit',
+    phoneNumber: '7666666666',
+    status: 'upcoming',
+  },
+  {
+    guestName: 'Ajay Kapoor',
+    date: '2025-06-04',
+    purpose: 'Installation',
+    phoneNumber: '7555555555',
+    status: 'upcoming',
+  },
+];
+
 export default {
   general,
   security,
@@ -209,4 +334,7 @@ export default {
   faqs,
   onboarding,
   categories,
+  admin,
+  resident,
+  visitors,
 };

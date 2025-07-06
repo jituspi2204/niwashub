@@ -1,12 +1,15 @@
 import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import HomeScreen from '../features/dashboard/screens/HomeScreen.tsx';
-import { StatusBar, StyleSheet, TouchableOpacity } from 'react-native';
+import { StyleSheet, TouchableOpacity } from 'react-native';
 import { Icon } from '../components';
 import { useTheme } from '../theme/ThemeContext.tsx';
 import HomeStack from './HomeStack.tsx';
 import SettingsStack from './SettingsStack.tsx';
 import { getFocusedRouteNameFromRoute } from '@react-navigation/native';
+import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome';
+import IonIcon from 'react-native-vector-icons/Ionicons';
+import ProfileStack from './ProfileStack.tsx';
 
 const Tab = createBottomTabNavigator();
 const DashboardBottomTab: React.FC = () => {
@@ -37,45 +40,56 @@ const DashboardBottomTab: React.FC = () => {
             },
             tabBarStyle:
               routeName === 'HomeScreen'
-                ? [styles.tabBar, { backgroundColor: colors.n50 }]
+                ? [styles.tabBar, { backgroundColor: colors.background }]
                 : [{ display: 'none' }],
           };
         }}
       />
       <Tab.Screen
-        name="Statistics"
-        component={HomeScreen}
-        options={({ route }) => {
-          const routeName =
-            getFocusedRouteNameFromRoute(route) ?? 'StatisticsHome';
-          return {
-            tabBarIcon: ({ color, focused }) => {
-              return (
-                <Icon name={focused ? 'graphBold' : 'graph'} color={color} />
-              );
-            },
-            tabBarStyle:
-              routeName === 'StatisticsHome'
-                ? [styles.tabBar, { backgroundColor: colors.n50 }]
-                : [{ display: 'none' }],
-          };
-        }}
-      />
-      <Tab.Screen
-        name="Budgets"
+        name="Chat"
         component={HomeScreen}
         options={({ route }) => {
           const routeName = getFocusedRouteNameFromRoute(route) ?? 'BudgetHome';
           return {
             tabBarIcon: ({ color, focused }) => {
               return (
-                <Icon name={focused ? 'graphBold' : 'graph'} color={color} />
+                <IonIcon
+                  name={
+                    focused
+                      ? 'chatbubble-ellipses'
+                      : 'chatbubble-ellipses-outline'
+                  }
+                  color={color}
+                  size={28}
+                />
               );
             },
             tabBarStyle:
               routeName === 'BudgetHome'
-                ? [styles.tabBar, { backgroundColor: colors.n50 }]
+                ? [styles.tabBar, { backgroundColor: colors.background }]
                 : [{ display: 'none' }],
+          };
+        }}
+      />
+      <Tab.Screen
+        name="Account"
+        component={ProfileStack}
+        options={({ route }) => {
+          const routeName = getFocusedRouteNameFromRoute(route) ?? 'BudgetHome';
+          return {
+            tabBarIcon: ({ color, focused }) => {
+              return (
+                <FontAwesomeIcon
+                  name={focused ? 'user' : 'user-o'}
+                  color={color}
+                  size={26}
+                />
+              );
+            },
+            tabBarStyle: [
+              styles.tabBar,
+              { backgroundColor: colors.background },
+            ],
           };
         }}
       />
@@ -96,7 +110,7 @@ const DashboardBottomTab: React.FC = () => {
             },
             tabBarStyle:
               routeName === 'SettingsHome'
-                ? [styles.tabBar, { backgroundColor: colors.n50 }]
+                ? [styles.tabBar, { backgroundColor: colors.background }]
                 : [{ display: 'none' }],
           };
         }}

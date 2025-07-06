@@ -27,7 +27,7 @@ const LoadingView: React.FC<Props> = ({loadingText}) => {
                 source={require('../../assets/loading.json')}
             />
             <Text h6 style={{color: '#1FAD98'}}>
-                finchmoney.ai
+                nivaasHub
             </Text>
             <Text base n400>
                 {loadingText}

@@ -210,6 +210,7 @@ export const lightTheme: Theme = {
     ...colors,
 
     background: '#F1F5F9',
+    subBackground: '#F1F5FA',
     primaryText: '#FFFFFF',
     secondaryText: '#F4F4F4',
     accentButton: '#FF6B6B',
@@ -235,6 +236,7 @@ export const darkTheme: Theme = {
   colors: {
     ...colors,
     background: '#141718',
+    subBackground: '#1F2223',
     primaryText: '#FFFFFF',
     secondaryText: '#F4F4F4',
     accentButton: '#FF6B6B',

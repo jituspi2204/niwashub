@@ -5,17 +5,11 @@ import {
   StyleSheet,
   useColorScheme,
 } from 'react-native';
-import {
-  Button,
-  Header,
-  Icon,
-  Text,
-  TextInput,
-  View,
-} from '../../../components';
+import { Header, View } from '../../../components';
 import { useTheme } from '../../../theme/ThemeContext.tsx';
-import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { useNavigation } from '@react-navigation/native';
+import Section from '../components/Section.tsx';
+import Services from '../components/Services.tsx';
 
 const HomeScreen: React.FC = () => {
   const { colors } = useTheme();
@@ -26,21 +20,17 @@ const HomeScreen: React.FC = () => {
       safe
       style={[styles.container, { backgroundColor: colors.background }]}>
       <StatusBar
-        barStyle={colorScheme == 'dark' ? 'light-content' : 'dark-content'}
+        barStyle={colorScheme === 'dark' ? 'light-content' : 'dark-content'}
         backgroundColor={colors.background}
       />
-      <Header type="main" onPress={() => navigation.navigate('Profile')} />
-      <TextInput
-        title="Add bill"
-        type="button"
-        onPress={() => navigation.navigate('AddBill', {})}
+      <Header
+        type="main"
+        onPress={() => navigation.navigate('Profile')}
+        style={styles.header}
       />
-
-      <TextInput
-        title="Add income"
-        type="button"
-        onPress={() => navigation.navigate('AddIncome', {})}
-      />
+      <Section title="Community">
+        <Services items={[]} />
+      </Section>
     </View>
   );
 };
@@ -50,7 +40,9 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingHorizontal: 16,
   },
-
+  header: {
+    borderBottomWidth: 0.2,
+  },
   balance: {
     paddingTop: 24,
     paddingBottom: 24,

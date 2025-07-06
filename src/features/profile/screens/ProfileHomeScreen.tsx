@@ -1,110 +1,119 @@
-import React from 'react';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import React, { useState } from 'react';
 import { Image, ScrollView, StyleSheet, TouchableOpacity } from 'react-native';
-import { Text, TextInput, View } from '../../../components';
+import { useDispatch, useSelector } from 'react-redux';
+import { userApi } from '../../../api/index.ts';
+import { Text, View } from '../../../components';
+import WrappedView from '../../../components/WrappedView.tsx';
+import { RootState } from '../../../store/store.ts';
 import { useTheme } from '../../../theme/ThemeContext.tsx';
 import { avatars } from '../../../utils/images.ts';
-import Toast from 'react-native-toast-message';
-import ListItem from '../components/ListItem.tsx';
 import mock from '../../../utils/mock.ts';
-import { useDispatch, useSelector } from 'react-redux';
 import { logoutUser } from '../../auth/authSlice.ts';
-import { getAuth, signOut } from '@react-native-firebase/auth';
-import { RootState } from '../../../store/store.ts';
-import { setLoading } from '../../../reducers/utilssSlice.ts';
-import { GoogleSignin } from '@react-native-google-signin/google-signin';
+import ListItem from '../components/ListItem.tsx';
+
 const ProfileHomeScreen: React.FC = ({ profileItems = mock.profileItems }) => {
   const { colors } = useTheme();
   const dispatch = useDispatch();
-  // const loading = useSelector((state: RootState) => state.utils.loading);
+  const [loading, setLoading] = useState<boolean>(false);
+  const auth = useSelector((state: RootState) => state.auth);
   const logoutHandler = async () => {
-    dispatch(setLoading({ active: true, message: 'Logging out...' }));
-    await GoogleSignin.revokeAccess();
-    await GoogleSignin.signOut();
-    signOut(getAuth()).then(() => {
-      dispatch(setLoading({ active: false, message: '' }));
-    });
+    setLoading(true);
+    const response = await userApi.logoutUser(auth.loginToken);
+    if (response) {
+      dispatch(logoutUser());
+      await AsyncStorage.multiRemove([
+        'login_token',
+        'new_user',
+        'active_flat',
+      ]);
+    }
+    setLoading(false);
   };
   return (
-    <View
-      safe
-      style={[
-        styles.container,
-        {
-          backgroundColor: colors.n100,
-        },
-      ]}>
-      <ScrollView>
-        <View
-          style={[
-            styles.wrapper,
-            {
-              backgroundColor: colors.n50,
-              flexDirection: 'row',
-              alignItems: 'center',
-              gap: 16,
-            },
-          ]}>
-          <View>
-            <View
-              style={[
-                styles.avatar_container,
-                {
-                  borderColor: colors.blue50,
-                },
-              ]}>
-              <Image source={avatars.indianMan} style={styles.avatar} />
-            </View>
-          </View>
+    <WrappedView isLoading={loading}>
+      <View
+        safe
+        style={[
+          styles.container,
+          {
+            backgroundColor: colors.background,
+          },
+        ]}>
+        <ScrollView>
           <View
             style={[
+              styles.wrapper,
               {
-                gap: 8,
+                backgroundColor: colors.subBackground,
+                flexDirection: 'row',
+                alignItems: 'center',
+                gap: 16,
               },
             ]}>
-            <Text base n700>
-              Eleyas Hasan
-            </Text>
-            <Text caption n400>
-              +1 352 844 0270
-            </Text>
+            <View>
+              <View
+                style={[
+                  styles.avatar_container,
+                  {
+                    borderColor: colors.blue50,
+                  },
+                ]}>
+                <Image source={avatars.indianMan} style={styles.avatar} />
+              </View>
+            </View>
+            <View
+              style={[
+                {
+                  gap: 8,
+                },
+              ]}>
+              <Text base n700>
+                Eleyas Hasan
+              </Text>
+              <Text caption n400>
+                +1 352 844 0270
+              </Text>
+            </View>
           </View>
-        </View>
 
-        <View
-          style={[
-            styles.wrapper,
-            {
-              backgroundColor: colors.n50,
-            },
-          ]}>
-          {profileItems.map((item, index) => (
-            <ListItem
-              key={index}
-              item={item}
-              style={{
-                paddingTop: index === 0 ? 0 : 16,
-                paddingBottom: index === profileItems.length - 1 ? 0 : 16,
-                borderBottomWidth: index === profileItems.length - 1 ? 0 : 0.5,
-                borderBottomColor: colors.n200,
-              }}
-            />
-          ))}
-        </View>
+          <View
+            style={[
+              styles.wrapper,
+              {
+                backgroundColor: colors.subBackground,
+              },
+            ]}>
+            {profileItems.map((item, index) => (
+              <ListItem
+                key={index}
+                item={item}
+                style={{
+                  paddingTop: index === 0 ? 0 : 16,
+                  paddingBottom: index === profileItems.length - 1 ? 0 : 16,
+                  borderBottomWidth:
+                    index === profileItems.length - 1 ? 0 : 0.5,
+                  borderBottomColor: colors.n200,
+                }}
+              />
+            ))}
+          </View>
 
-        <TouchableOpacity
-          style={[
-            styles.wrapper,
-            {
-              backgroundColor: colors.n50,
-            },
-          ]}
-          onPress={logoutHandler}>
-          <Text base n700 style={{ marginLeft: 16 }}>
-            Logout
-          </Text>
-        </TouchableOpacity>
-      </ScrollView>
-    </View>
+          <TouchableOpacity
+            style={[
+              styles.wrapper,
+              {
+                backgroundColor: colors.subBackground,
+              },
+            ]}
+            onPress={logoutHandler}>
+            <Text base n700 style={{ marginLeft: 16 }}>
+              Logout
+            </Text>
+          </TouchableOpacity>
+        </ScrollView>
+      </View>
+    </WrappedView>
   );
 };
 

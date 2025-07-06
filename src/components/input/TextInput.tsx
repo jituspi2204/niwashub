@@ -19,6 +19,7 @@ type TextInputType =
     | 'email'
     | 'password'
     | 'phone'
+    | any
 interface TextInputPropsExtended extends TextInputProps {
     type: TextInputType;
     title?: string;

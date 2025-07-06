@@ -7,7 +7,7 @@ import {
     StyleProp,
     ViewProps,
 } from 'react-native';
-import { useTheme } from '../theme/ThemeContext';
+import { useTheme } from '../../theme/ThemeContext.tsx';
 
 type CustomViewProps = ViewProps & {
     children?: React.ReactNode;

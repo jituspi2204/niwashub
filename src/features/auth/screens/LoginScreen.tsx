@@ -1,35 +1,29 @@
-import React from 'react';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { NavigationProp, useNavigation } from '@react-navigation/native';
+import React, { useState } from 'react';
 import {
-  Image,
   SafeAreaView,
   ScrollView,
   StyleSheet,
   TouchableOpacity,
 } from 'react-native';
-import { useTheme } from '../../../theme/ThemeContext.tsx';
-import { Button, HeadingWithLine, Icon, Text, View } from '../../../components';
-import { NavigationProp, useNavigation } from '@react-navigation/native';
-import { images } from '../../../utils';
-import WrappedView from '../../../components/WrappedView.tsx';
 import Toast from 'react-native-toast-message';
-import { PhoneInput } from '../../../components/input';
-import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from '../../../store/store.ts';
-import { setLoading } from '../../../reducers/utilssSlice.ts';
-import auth from '@react-native-firebase/auth';
-import { GoogleSignin } from '@react-native-google-signin/google-signin';
-import DeviceInfo from 'react-native-device-info';
+import { useDispatch } from 'react-redux';
+import { authApi } from '../../../api/index.ts';
+import { Button, Text, View } from '../../../components';
+import { PhoneInput, TextInput } from '../../../components/input';
+import WrappedView from '../../../components/WrappedView.tsx';
 import { AuthStackParamList } from '../../../navigation/types.ts';
+import { useTheme } from '../../../theme/ThemeContext.tsx';
+import { logInUser } from '../authSlice.ts';
 
 const LoginScreen: React.FC = ({}) => {
   const { colors } = useTheme();
   const navigation = useNavigation<NavigationProp<AuthStackParamList>>();
   const [phoneNumber, setPhoneNumber] = React.useState<string>('');
-  const loading = useSelector((state: RootState) => state.utils.loading);
+  const [password, setPassword] = useState<string>('');
+  const [loading, setLoading] = useState<boolean>(false);
   const dispatch = useDispatch();
-  const phoneOnChangeHandler = (value: string) => {
-    setPhoneNumber(value);
-  };
 
   const sendOtpHandler = async () => {
     // Validate phone number
@@ -41,162 +35,121 @@ const LoginScreen: React.FC = ({}) => {
       return;
     }
     console.log('phoneNumber : ', phoneNumber);
-
-    try {
-      dispatch(
-        setLoading({ active: true, message: 'Sending OTP...' })
-      );
-
-      // Check if running on emulator
-      const emulator = DeviceInfo.isEmulatorSync();
-
-      if (emulator) {
-        console.log('Running on emulator, using mock verification');
-
-        // For emulators, create a mock verification ID
-        try {
-          console.log('Navigating to Otp with:', {
-            phoneNumber,
-            verificationId: 'emulator-verification-id',
-            isEmulator: true,
-          });
-          navigation.navigate('Otp', {
-            phoneNumber,
-            verificationId: 'emulator-verification-id',
-            isEmulator: true,
-          });
-        } catch (error) {
-          console.error('Navigation error:', error);
-        }
-
-
-        dispatch(setLoading({ active: false, message: '' }));
-        Toast.show({
-          type: 'success',
-          text1: 'Emulator detected. Use 123456 or 1234 as OTP for testing.',
-        });
-        return;
-      }
-
-      // Request OTP verification for real devices
-      const confirmation = await auth().signInWithPhoneNumber(phoneNumber);
-
-      // Store confirmation in state management or pass to OTP screen
-      navigation.navigate('Otp', {
-        phoneNumber,
-        verificationId: confirmation.verificationId,
-        isEmulator: false,
-      });
-
-      dispatch(setLoading({ active: false, message: '' }));
-      Toast.show({
-        type: 'success',
-        text1: 'OTP sent successfully',
-      });
-    } catch (error) {
-      console.error('Error sending OTP:', error);
-      dispatch(setLoading({ active: false, message: '' }));
-      Toast.show({
-        type: 'error',
-        text1: 'Failed to send OTP. Please try again.',
-      });
-    }
   };
 
-  const signInWithGoogle = async () => {
-    try {
-      dispatch(
-        setLoading({ active: true, message: 'Signing in with Google...' }),
-      );
-      const idToken = await GoogleSignin.signIn();
-      console.log('idToken : ', idToken);
-      const googleCredential = auth.GoogleAuthProvider.credential(
-        idToken.data?.idToken!,
-      );
-      await auth().signInWithCredential(googleCredential);
-      dispatch(setLoading({ active: false, message: '' }));
-      Toast.show({ type: 'success', text1: 'Signed in with Google' });
-      // navigate to your home/dashboard screen here
-    } catch (error) {
-      console.log('error : ', error);
-      dispatch(setLoading({ active: false, message: '' }));
-      Toast.show({ type: 'error', text1: 'Google sign-in failed' });
+  const loginHandler = async () => {
+    if (phoneNumber.length < 8 || password.length < 6) {
+      Toast.show({
+        type: 'error',
+        text1: 'Please enter a valid phone number',
+      });
+      return;
     }
+    setLoading(true);
+    const user = await authApi.loginUserThroughPhonePassword(
+      phoneNumber,
+      password,
+    );
+    if (user) {
+      await AsyncStorage.multiSet([
+        ['login_token', user.login_token],
+        ['new_user', 'true'],
+      ]);
+      dispatch(
+        logInUser({
+          loggedIn: true,
+          loginToken: user.login_token,
+          id: user.user.id,
+          user: user.user,
+          newUser: true,
+        }),
+      );
+      navigation.navigate('UserFlats', {
+        loginToken: '',
+        userDetails: {},
+      });
+    } else {
+      Toast.show({
+        type: 'error',
+        text1: 'Please enter a valid phone number and password',
+      });
+    }
+    setLoading(false);
   };
 
   return (
-    <WrappedView isLoading={loading.active} loadingText={loading.message}>
+    <WrappedView isLoading={loading} loadingText={''} loadingStyle="overlay">
       <SafeAreaView
         style={[
           styles.container,
           {
-            backgroundColor: colors.n100,
+            backgroundColor: colors.background,
           },
         ]}>
         {/* eslint-disable-next-line react-native/no-inline-styles */}
         <ScrollView contentContainerStyle={{ width: '100%' }}>
-          <Image
-            source={images.img1}
-            style={styles.image}
-            resizeMode="contain"
-          />
           <View style={[styles.titleContainer]}>
-            <Text h5 n700>
-              Sign in to your account
+            <Text h5 n800>
+              Welcome back!
             </Text>
-            <Text caption n400>
-              From daily expenses to long-term goals — plan it all in one app.
+            <Text base2 n600>
+              Login to your account to manage your society in smarter way
             </Text>
           </View>
-
           <View
             style={[
               styles.wrapper,
               {
-                backgroundColor: colors.n50,
+                backgroundColor: colors.subBackground,
               },
             ]}>
             <PhoneInput
               placeholder="Phone number"
-              onChangeText={phoneOnChangeHandler}
+              onChangeText={val => setPhoneNumber(val)}
             />
+            <TextInput
+              type="password"
+              placeholder="Enter password"
+              onChangeText={val => setPassword(val)}
+            />
+            <TouchableOpacity style={{ alignSelf: 'flex-end' }}>
+              <Text base2Medium primary>
+                Forgot password
+              </Text>
+            </TouchableOpacity>
             <Button
               type="primary"
-              style={{ marginVertical: 24 }}
-              onPress={sendOtpHandler}>
+              style={{ marginVertical: 20 }}
+              onPress={loginHandler}>
               <Text base blue50>
-                Send OTP
+                Login
               </Text>
             </Button>
-            <HeadingWithLine
-              title="or sign in with"
-              style={{ marginVertical: 20 }}
-            />
-            <View style={[styles.socialButtons]}>
-              <Button
-                type="secondary"
-                style={styles.socialButton}
-                onPress={signInWithGoogle}>
-                <Icon name="google" size={24} />
-                <Text base n700>
-                  Google
+            <View style={[styles.flexRow, { justifyContent: 'center' }]}>
+              <Text base2>Dont have an account?</Text>
+              <TouchableOpacity
+                style={{ alignSelf: 'center' }}
+                onPress={() => navigation.navigate('Signup')}>
+                <Text base2 primary>
+                  {' '}
+                  Registers
                 </Text>
-              </Button>
+              </TouchableOpacity>
             </View>
           </View>
         </ScrollView>
         <View style={[styles.bottomContainer, styles.flexCol]}>
-          <Text caption n400>
+          <Text base2Medium n600>
             By signing up, you agree to our and{' '}
           </Text>
           <View style={styles.flexRow}>
             <TouchableOpacity>
-              <Text captionMedium blue500>
+              <Text captionMedium primary>
                 Terms & Conditions
               </Text>
             </TouchableOpacity>
             <TouchableOpacity style={{ marginLeft: 10 }}>
-              <Text captionMedium blue500>
+              <Text captionMedium primary>
                 Privacy policy
               </Text>
             </TouchableOpacity>

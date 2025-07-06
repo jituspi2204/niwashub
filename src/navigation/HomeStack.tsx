@@ -1,25 +1,19 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-
-import AddIncomeScreen from '../features/cashflow/screens/AddIncomeScreen.tsx';
 import RecentTransactionsScreen from '../features/cashflow/screens/RecentTransactionsScreen.tsx';
 import AddBillScreen from '../features/cashflow/screens/AddBillScreen.tsx';
 import ProfileStack from './ProfileStack.tsx';
 import HomeScreen from '../features/dashboard/screens/HomeScreen.tsx';
 import { Header } from '../components';
-import { colors } from '../theme/theme.ts';
-import {
-  getFocusedRouteNameFromRoute,
-  NavigationProp,
-  RouteProp,
-} from '@react-navigation/native';
-import { AuthStackParamList, DashboardStackParamList } from './types.ts';
+import { NavigationProp, RouteProp } from '@react-navigation/native';
+import { DashboardStackParamList } from './types.ts';
+import VisitorStack from './VisitorStack.tsx';
 import { useTheme } from '../theme/ThemeContext.tsx';
 
 const getTitle = route => {
   switch (route) {
-    case 'AddIncome':
-      return 'Add Income ';
+    case 'Visitors':
+      return 'Visitors';
     case 'AddBill':
       return 'Add Bill';
     default:
@@ -36,29 +30,11 @@ type Props = {
 
 const Stack = createNativeStackNavigator();
 const HomeStack: React.FC<Props> = ({ route, navigation }) => {
-  // const { colors } = useTheme();
-  // React.useLayoutEffect(() => {
-  //   const routeName = getFocusedRouteNameFromRoute(route) ?? 'HomeScreen';
-  //   console.log('route ', route);
-  //   if (routeName !== 'HomeScreen') {
-  //     navigation.setOptions({
-  //       tabBarStyle: { display: 'none' },
-  //     });
-  //   } else {
-  //     navigation.setOptions({
-  //       tabBarStyle: {
-  //         display: 'flex',
-  //         height: 70,
-  //         elevation: 0,
-  //         borderTopWidth: 0,
-  //         backgroundColor: colors.n50,
-  //       },
-  //     });
-  //   }
-  // }, [navigation, route, colors]);
+  const { colors } = useTheme();
   return (
     <Stack.Navigator
       screenOptions={{
+        animation: 'slide_from_right',
         headerShown: true,
         header: ({ route, navigation }) => (
           <Header
@@ -74,7 +50,11 @@ const HomeStack: React.FC<Props> = ({ route, navigation }) => {
         component={HomeScreen}
         options={{ headerShown: false }}
       />
-      <Stack.Screen name="AddIncome" component={AddIncomeScreen} />
+      <Stack.Screen
+        name="Visitors"
+        component={VisitorStack}
+        options={{ headerShown: false }}
+      />
       <Stack.Screen name="AddBill" component={AddBillScreen} />
       <Stack.Screen
         name="RecentTransactions"
