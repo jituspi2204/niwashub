@@ -64,7 +64,7 @@ const PhoneInput: React.FC<Props> = ({ style, ...props }) => {
         </Text>
       </View>
       <Input
-        style={[styles.input, { color: colors.n700, letterSpacing: 3 }]}
+        style={[styles.input, { color: colors.n700 }]}
         {...props}
         value={value}
         onChangeText={val => {

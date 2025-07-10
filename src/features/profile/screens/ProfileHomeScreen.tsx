@@ -26,6 +26,7 @@ const ProfileHomeScreen: React.FC = ({ profileItems = mock.profileItems }) => {
         'login_token',
         'new_user',
         'active_flat',
+        'role',
       ]);
     }
     setLoading(false);

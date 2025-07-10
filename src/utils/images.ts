@@ -15,6 +15,9 @@ export const images = {
   visitor: require('../assets/images/visitor.png'),
   parking: require('../assets/images/parking.png'),
   empty: require('../assets/images/empty.png'),
+  resident: require('../assets/images/resident.png'),
+  admin: require('../assets/images/admin.png'),
+  guard: require('../assets/images/guard.png'),
 };
 
 export const avatars = {

@@ -2,7 +2,7 @@ import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import HomeScreen from '../features/dashboard/screens/HomeScreen.tsx';
 import { StyleSheet, TouchableOpacity } from 'react-native';
-import { Icon } from '../components';
+import { Icon, View } from '../components';
 import { useTheme } from '../theme/ThemeContext.tsx';
 import HomeStack from './HomeStack.tsx';
 import SettingsStack from './SettingsStack.tsx';
@@ -10,9 +10,10 @@ import { getFocusedRouteNameFromRoute } from '@react-navigation/native';
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome';
 import IonIcon from 'react-native-vector-icons/Ionicons';
 import ProfileStack from './ProfileStack.tsx';
+import ListItem from '../features/profile/components/ListItem.tsx';
 
 const Tab = createBottomTabNavigator();
-const DashboardBottomTab: React.FC = () => {
+const ResidentBottomTab: React.FC = () => {
   const { colors } = useTheme();
   return (
     <Tab.Navigator
@@ -132,4 +133,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default DashboardBottomTab;
+export default ResidentBottomTab;

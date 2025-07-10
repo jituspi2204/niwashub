@@ -11,6 +11,8 @@ import RegisterSocietyScreen from '../features/auth/screens/RegisterSocietyScree
 import SignupScreen from '../features/auth/screens/SignupScreen.tsx';
 import UserSocietyScreen from '../features/auth/screens/UserSocietyScreen.tsx';
 import { RootState } from '../store/store.ts';
+import RegisterFlatsScreen from '../features/auth/screens/RegisterFlatsScreen.tsx';
+import UserRoleScreen from '../features/auth/screens/UserRoleScreen.tsx';
 
 const Stack = createNativeStackNavigator();
 const AuthStack: React.FC = () => {
@@ -20,7 +22,7 @@ const AuthStack: React.FC = () => {
       screenOptions={{
         headerShown: false,
       }}
-      initialRouteName={auth.loggedIn ? 'UserFlats' : 'Login'}>
+      initialRouteName={auth.loggedIn ? 'UserRole' : 'Login'}>
       <Stack.Screen name="Login" component={LoginScreen} />
       <Stack.Screen name="Otp" component={OtpVerificationScreen} />
       <Stack.Screen
@@ -33,6 +35,8 @@ const AuthStack: React.FC = () => {
       <Stack.Screen name="UserFlats" component={UserSocietyScreen} />
       <Stack.Screen name="RegisterSociety" component={RegisterSocietyScreen} />
       <Stack.Screen name="Register" component={PersonalInfoScreen} />
+      <Stack.Screen name="RegisterFlats" component={RegisterFlatsScreen} />
+      <Stack.Screen name="UserRole" component={UserRoleScreen} />
     </Stack.Navigator>
   );
 };

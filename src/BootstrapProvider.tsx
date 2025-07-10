@@ -6,10 +6,12 @@ import { userApi } from './api';
 import LoadingView from './components/LoadingView.tsx';
 import { logInUser } from './features/auth/authSlice.ts';
 import AuthStack from './navigation/AuthStack.tsx';
-import DashboardBottomTab from './navigation/DashboardBottomTab.tsx';
+import ResidentBottomTab from './navigation/ResidentBottomTab.tsx';
 import { setLoading } from './reducers/utilssSlice.ts';
 import { RootState } from './store/store.ts';
 import { useTheme } from './theme/ThemeContext.tsx';
+import AdminBottomTab from './navigation/AdminBottomTab.tsx';
+import GuardBottomTab from './navigation/GuardBottomTab.tsx';
 
 const BootstrapProvider: React.FC = () => {
   const dispatch = useDispatch();
@@ -19,10 +21,8 @@ const BootstrapProvider: React.FC = () => {
 
   async function handleAuthStateChanged() {
     try {
-      let [[key1, loginToken], [key2, newUser]] = await AsyncStorage.multiGet([
-        'login_token',
-        'new_user',
-      ]);
+      let [[key1, loginToken], [key2, newUser], [key3, role]] =
+        await AsyncStorage.multiGet(['login_token', 'new_user', 'role']);
       if (loginToken) {
         const userDetails = await userApi.getUserDetails(loginToken);
         if (userDetails) {
@@ -33,6 +33,7 @@ const BootstrapProvider: React.FC = () => {
               id: userDetails.id,
               user: userDetails,
               newUser: newUser,
+              role: role,
             }),
           );
           return;
@@ -45,6 +46,7 @@ const BootstrapProvider: React.FC = () => {
           id: '',
           user: {},
           newUser: false,
+          role: null,
         }),
       );
     } catch (error) {}
@@ -68,8 +70,16 @@ const BootstrapProvider: React.FC = () => {
       <StatusBar barStyle="dark-content" backgroundColor={colors.background} />
       {loading.active ? (
         <LoadingView />
-      ) : auth.loggedIn && !auth.newUser ? (
-        <DashboardBottomTab />
+      ) : auth.loggedIn ? (
+        auth.role === 'RESIDENT' ? (
+          <ResidentBottomTab />
+        ) : auth.role === 'ADMIN' ? (
+          <AdminBottomTab />
+        ) : auth.role === 'GUARD' ? (
+          <GuardBottomTab />
+        ) : (
+          <AuthStack />
+        )
       ) : (
         <AuthStack />
       )}

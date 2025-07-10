@@ -24,19 +24,6 @@ const LoginScreen: React.FC = ({}) => {
   const [password, setPassword] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(false);
   const dispatch = useDispatch();
-
-  const sendOtpHandler = async () => {
-    // Validate phone number
-    if (!phoneNumber || phoneNumber.length < 8) {
-      Toast.show({
-        type: 'error',
-        text1: 'Please enter a valid phone number',
-      });
-      return;
-    }
-    console.log('phoneNumber : ', phoneNumber);
-  };
-
   const loginHandler = async () => {
     if (phoneNumber.length < 8 || password.length < 6) {
       Toast.show({
@@ -64,10 +51,10 @@ const LoginScreen: React.FC = ({}) => {
           newUser: true,
         }),
       );
-      navigation.navigate('UserFlats', {
-        loginToken: '',
-        userDetails: {},
-      });
+      // navigation.navigate('UserFlats', {
+      //   loginToken: '',
+      //   userDetails: {},
+      // });
     } else {
       Toast.show({
         type: 'error',
@@ -112,7 +99,9 @@ const LoginScreen: React.FC = ({}) => {
               placeholder="Enter password"
               onChangeText={val => setPassword(val)}
             />
-            <TouchableOpacity style={{ alignSelf: 'flex-end' }}>
+            <TouchableOpacity
+              style={{ alignSelf: 'flex-end' }}
+              onPress={() => navigation.navigate('ForgotPassword')}>
               <Text base2Medium primary>
                 Forgot password
               </Text>

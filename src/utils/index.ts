@@ -1,3 +1,4 @@
-import {images} from './images';
+import { images } from './images';
 import icons from './icons';
-export {images, icons};
+import * as content from './content';
+export { images, icons, content };

@@ -1,7 +1,7 @@
 import { useNavigation } from '@react-navigation/native';
-import React, { useEffect, useState } from 'react';
+import React, { act, useEffect, useState } from 'react';
 import { SafeAreaView, ScrollView, StyleSheet } from 'react-native';
-import { bootstrapApi } from '../../../api/index.ts';
+import { bootstrapApi, flatApi, societyApi } from '../../../api/index.ts';
 import { Button, Text, View } from '../../../components';
 import Header from '../../../components/Header';
 import SearchSelectInput from '../../../components/input/SearchSelectInput.tsx';
@@ -13,9 +13,16 @@ const RegisterResidentScreen: React.FC = () => {
   const navigation = useNavigation();
   const router = {};
   const [agree, setAgree] = React.useState(false);
-  const [active, setActive] = React.useState({ state: '', city: '' });
+  const [active, setActive] = React.useState({
+    state: '',
+    city: '',
+    society: '',
+  });
   const [states, setStates] = React.useState<[]>([]);
   const [cities, setCities] = React.useState<[]>([]);
+  const [socities, setSocities] = React.useState<[]>([]);
+  const [block, setBlocks] = React.useState<[]>([]);
+  const [flats, setFlats] = React.useState<[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
 
   const fetchState = async () => {
@@ -31,10 +38,27 @@ const RegisterResidentScreen: React.FC = () => {
   const fetchCities = async (state: string) => {
     setLoading(true);
     let response = await bootstrapApi.getCitiesForState(state);
-    console.log('res', response);
-
+    response.sort((a: any, b: any) => a.city.localeCompare(b.city));
     setCities(response.map(val => ({ label: val.city, value: val.city })));
     setLoading(false);
+  };
+
+  const fetchSocieties = async (city: string, state: string) => {
+    setLoading(true);
+    let repsonse = await societyApi.getAllSocitiesFromCity(city, state);
+    setSocities(
+      repsonse.map(val => ({
+        value: val.society_id,
+        label: `${val.society_name} - ${val.society_address}`,
+      })),
+    );
+    setLoading(false);
+  };
+
+  const fetchBlockAndFlats = async (societyId: string) => {
+    setLoading(true);
+    let repsonse = await flatApi.fetchBlockAndFlatsForSociety(societyId);
+    let newBlocks = setLoading(false);
   };
 
   useEffect(() => {
@@ -64,7 +88,7 @@ const RegisterResidentScreen: React.FC = () => {
             <SearchSelectInput
               options={states}
               label="State"
-              placeholder={active.state}
+              placeholder={active.state || 'Click to select'}
               onSelect={async value => {
                 setActive(prev => ({ ...prev, state: value }));
                 await fetchCities(value);
@@ -73,18 +97,30 @@ const RegisterResidentScreen: React.FC = () => {
             <SearchSelectInput
               options={cities}
               label="City"
-              onSelect={() => {}}
+              placeholder={active.city || 'Click to select'}
+              onSelect={async value => {
+                setActive(prev => ({ ...prev, city: value }));
+                await fetchSocieties(value, active.state);
+              }}
             />
             <SearchSelectInput
-              options={[]}
+              options={socities}
               label="Society"
-              onSelect={() => {}}
+              placeholder={active.society || 'Click to select'}
+              onSelect={async value => {
+                setActive(prev => ({ ...prev, society: value }));
+                let selectedSocietyId = -1;
+                // for(let i = 0; i < socities.length;i++){
+                //   if(socities[i].label == )
+                // }
+                await fetchBlockAndFlats();
+              }}
             />
-            <SearchSelectInput
+            {/* <SearchSelectInput
               options={[]}
               label="Block No"
               onSelect={() => {}}
-            />
+            /> */}
             <SearchSelectInput
               options={[]}
               label="Flat No"

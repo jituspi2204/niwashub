@@ -33,15 +33,18 @@ const SearchSelectInput: React.FC<SelectInputProps> = ({
   const [activeValue, setActiveValue] = useState<string>('');
   const { colors } = useTheme();
 
-  const handleSelect = (value: string) => {
+  const handleSelect = (value: string, label: string) => {
+    console.log('value is', value);
     setModalVisible(false);
-    setActiveValue(value);
-    onSelect(value);
+    onSelect(label);
+    setActiveValue(label);
   };
-
-  const selectedLabel = activeValue;
   const inputHandler = (label: any) => {
-    const newOptions = options.filter(opt => opt.label === label);
+    console.log('label :', label);
+
+    const newOptions = options.filter(opt =>
+      opt.label.toLowerCase().includes(label.toLowerCase()),
+    );
     setAvailableOptions(newOptions);
   };
 
@@ -65,7 +68,7 @@ const SearchSelectInput: React.FC<SelectInputProps> = ({
         style={styles.input}
         onPress={() => setModalVisible(true)}>
         <Text base n600>
-          {selectedLabel || placeholder}
+          {placeholder}
         </Text>
       </TouchableOpacity>
 
@@ -101,7 +104,7 @@ const SearchSelectInput: React.FC<SelectInputProps> = ({
               renderItem={({ item }) => (
                 <TouchableOpacity
                   style={[styles.option, { borderColor: colors.n300 }]}
-                  onPress={() => handleSelect(item.label)}>
+                  onPress={() => handleSelect(item.value, item.label)}>
                   <Text base>{item.label}</Text>
                 </TouchableOpacity>
               )}

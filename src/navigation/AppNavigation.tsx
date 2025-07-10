@@ -4,7 +4,7 @@ import { useTheme } from '../theme/ThemeContext.tsx';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../store/store.ts';
 import { logInUser } from '../features/auth/authSlice.ts';
-import DashboardBottomTab from './DashboardBottomTab.tsx';
+import ResidentBottomTab from './ResidentBottomTab.tsx';
 import AuthStack from './AuthStack.tsx';
 import { LoadingView } from '../components';
 import { BaseToast, ErrorToast, ToastConfig } from 'react-native-toast-message';

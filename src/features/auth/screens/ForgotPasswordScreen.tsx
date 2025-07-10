@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   SafeAreaView,
   ScrollView,
@@ -14,12 +14,13 @@ import { PhoneInput } from '../../../components/input';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../../store/store.ts';
 import { AuthStackParamList } from '../../../navigation/types.ts';
+import { authApi } from '../../../api';
 
 const ForgotPasswordScreen: React.FC = ({}) => {
   const { colors } = useTheme();
+  const [loading, setLoading] = useState<boolean>(false);
   const navigation = useNavigation<NavigationProp<AuthStackParamList>>();
   const [phoneNumber, setPhoneNumber] = React.useState<string>('');
-  const loading = useSelector((state: RootState) => state.utils.loading);
   const dispatch = useDispatch();
   const phoneOnChangeHandler = (value: string) => {
     setPhoneNumber(value);
@@ -27,6 +28,7 @@ const ForgotPasswordScreen: React.FC = ({}) => {
 
   const sendOtpHandler = async () => {
     // Validate phone number
+    setLoading(true);
     if (!phoneNumber || phoneNumber.length < 8) {
       Toast.show({
         type: 'error',
@@ -34,11 +36,21 @@ const ForgotPasswordScreen: React.FC = ({}) => {
       });
       return;
     }
-    console.log('phoneNumber : ', phoneNumber);
+    const response = await authApi.sendOtpForVerification(
+      phoneNumber,
+      'FORGOT_PASSWORD',
+    );
+    if (response) {
+      navigation.navigate('Otp', {
+        phoneNumber,
+        verificationId: '',
+        otpFor: 'FORGOT_PASSWORD',
+      });
+    }
+    setLoading(false);
   };
-
   return (
-    <WrappedView isLoading={loading.active} loadingText={loading.message}>
+    <WrappedView isLoading={loading} loadingStyle="overlay">
       <SafeAreaView
         style={[
           styles.container,
@@ -46,7 +58,6 @@ const ForgotPasswordScreen: React.FC = ({}) => {
             backgroundColor: colors.background,
           },
         ]}>
-        {/* eslint-disable-next-line react-native/no-inline-styles */}
         <ScrollView contentContainerStyle={{ width: '100%' }}>
           <View style={[styles.titleContainer]}>
             <Text h5 n800>
@@ -71,12 +82,9 @@ const ForgotPasswordScreen: React.FC = ({}) => {
             <Button
               type="primary"
               style={{ marginVertical: 20 }}
-              onPress={() =>
-                navigation.navigate('ChangePassword', {
-                  phoneNumber,
-                  otpFor: 'change_password',
-                })
-              }>
+              onPress={async () => {
+                await sendOtpHandler();
+              }}>
               <Text base blue50>
                 Continue
               </Text>

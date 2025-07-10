@@ -9,7 +9,7 @@ import {
 } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { flatApi } from '../../../api';
-import { Text, View } from '../../../components';
+import { Button, Text, View } from '../../../components';
 import Empty from '../../../components/common/Empty.tsx';
 import WrappedView from '../../../components/WrappedView.tsx';
 import { setActiveFlat } from '../../../reducers/flatSlice.ts';
@@ -119,19 +119,26 @@ const UserSocietyScreen: React.FC = () => {
               subTitle="We dont find any flat registered with us "
             />
           )}
-          <View style={[styles.flexRow, { justifyContent: 'center' }]}>
-            <Text base2>Purchased new flat?</Text>
-            <TouchableOpacity
-              style={{ alignSelf: 'center' }}
-              onPress={() => {
-                navigation.navigate('RegisterResident');
-              }}>
-              <Text base2 primary>
-                {' '}
-                Register now
-              </Text>
-            </TouchableOpacity>
-          </View>
+          <Button
+            type="primary"
+            style={{ marginVertical: 20 }}
+            onPress={() => navigation.navigate('RegisterResident')}>
+            <Text base blue50>
+              Register your new flat
+            </Text>
+          </Button>
+          <Text base2 style={{ textAlign: 'center' }}>
+            Or
+          </Text>
+
+          <Button
+            type="secondary"
+            style={{ marginVertical: 20 }}
+            onPress={() => navigation.navigate('RegisterSociety')}>
+            <Text base primary>
+              Register new society
+            </Text>
+          </Button>
         </View>
       </SafeAreaView>
     </WrappedView>
