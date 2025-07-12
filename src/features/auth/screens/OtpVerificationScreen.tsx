@@ -43,10 +43,15 @@ const OtpVerificationScreen: React.FC = () => {
     const response = await authApi.verifyOtp(phoneNumber, otpCode, otpFor);
     if (response) {
       console.log('registration token:', response);
-
-      navigation.navigate('Register', {
-        registrationToken: response,
-      });
+      if (otpFor == 'REGISTER') {
+        navigation.navigate('Register', {
+          registrationToken: response,
+        });
+      } else {
+        navigation.navigate('ChangePassword', {
+          forgotPasswordToken: response,
+        });
+      }
     }
     setLoading(false);
   };

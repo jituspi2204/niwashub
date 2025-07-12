@@ -2,38 +2,43 @@ import React from 'react';
 import { SafeAreaView, ScrollView, StyleSheet } from 'react-native';
 import { useTheme } from '../../../theme/ThemeContext.tsx';
 import { Button, Text, View } from '../../../components';
-import { NavigationProp, useNavigation } from '@react-navigation/native';
+import {
+  NavigationProp,
+  useNavigation,
+  useRoute,
+} from '@react-navigation/native';
 import WrappedView from '../../../components/WrappedView.tsx';
 import Toast from 'react-native-toast-message';
 import { TextInput } from '../../../components/input';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../../store/store.ts';
 import { AuthStackParamList } from '../../../navigation/types.ts';
+import { setLoading } from '../../../reducers/utilssSlice.ts';
+import { authApi } from '../../../api/index.ts';
 
 const ChangePasswordScreen: React.FC = ({}) => {
   const { colors } = useTheme();
   const navigation = useNavigation<NavigationProp<AuthStackParamList>>();
-  const [phoneNumber, setPhoneNumber] = React.useState<string>('');
-  const loading = useSelector((state: RootState) => state.utils.loading);
-  const dispatch = useDispatch();
-  const phoneOnChangeHandler = (value: string) => {
-    setPhoneNumber(value);
-  };
+  const [newPassword, setNewPassword] = React.useState<string>('');
+  const [loading, setLoading] = React.useState<boolean>(false);
+  const route = useRoute();
 
-  const sendOtpHandler = async () => {
-    // Validate phone number
-    if (!phoneNumber || phoneNumber.length < 8) {
-      Toast.show({
-        type: 'error',
-        text1: 'Please enter a valid phone number',
-      });
-      return;
+  const changePasswordHandler = async () => {
+    console.log(route?.params?.forgotPasswordToken);
+    
+    setLoading(true);
+    let response = await authApi.changeUserPassword(
+      newPassword,
+      route?.params?.forgotPasswordToken,
+    );
+    if (response) {
+      navigation.navigate('Login');
     }
-    console.log('phoneNumber : ', phoneNumber);
+    setLoading(false);
   };
 
   return (
-    <WrappedView isLoading={loading.active} loadingText={loading.message}>
+    <WrappedView isLoading={loading} loadingStyle="overlay">
       <SafeAreaView
         style={[
           styles.container,
@@ -58,14 +63,18 @@ const ChangePasswordScreen: React.FC = ({}) => {
                 backgroundColor: colors.subBackground,
               },
             ]}>
-            <TextInput type="password" placeholder="Enter new password" />
+            <TextInput
+              type="password"
+              placeholder="Enter new password"
+              onChangeText={val => setNewPassword(val)}
+            />
             <TextInput type="password" placeholder="Confirm password" />
             <Button
               type="primary"
               style={{ marginVertical: 20 }}
-              onPress={() =>
-                navigation.navigate('UserSociety', { phoneNumber })
-              }>
+              onPress={async () => {
+                await changePasswordHandler();
+              }}>
               <Text base blue50>
                 Change password
               </Text>

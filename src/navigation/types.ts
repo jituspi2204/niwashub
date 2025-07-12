@@ -14,6 +14,9 @@ export type AuthStackParamList = {
   UserFlats : {
     loginToken : string,
     userDetails : any
+  },
+  ChangePassword : {
+    forgotPasswordToken : string
   }
   
 };

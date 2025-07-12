@@ -19,6 +19,7 @@ export const loginUserThroughPhonePassword = async (
       },
     );
     if (response?.data?.success) {
+      console.log('login response:', response);
       return response.data.data;
     } else {
       return null;
@@ -121,5 +122,25 @@ export const registerUser = async (
     console.log('error:', error);
 
     return '';
+  }
+};
+
+export const changeUserPassword = async (
+  newPassword: string,
+  token: string,
+) => {
+  try {
+    const response = await client.post('/auth/change-password', {
+      change_password_token: token,
+      new_password: newPassword,
+    });
+    if (response?.data) {
+      return true;
+    } else {
+      return null;
+    }
+  } catch (error) {
+    console.log('error:', error);
+    return null;
   }
 };

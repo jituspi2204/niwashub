@@ -41,6 +41,7 @@ const LoginScreen: React.FC = ({}) => {
       await AsyncStorage.multiSet([
         ['login_token', user.login_token],
         ['new_user', 'true'],
+        ['role', ''],
       ]);
       dispatch(
         logInUser({
