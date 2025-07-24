@@ -11,6 +11,7 @@ import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome';
 import IonIcon from 'react-native-vector-icons/Ionicons';
 import ProfileStack from './ProfileStack.tsx';
 import ListItem from '../features/profile/components/ListItem.tsx';
+import ChatStack from './ChatStack.tsx';
 
 const Tab = createBottomTabNavigator();
 const ResidentBottomTab: React.FC = () => {
@@ -48,7 +49,7 @@ const ResidentBottomTab: React.FC = () => {
       />
       <Tab.Screen
         name="Chat"
-        component={HomeScreen}
+        component={ChatStack}
         options={({ route }) => {
           const routeName = getFocusedRouteNameFromRoute(route) ?? 'BudgetHome';
           return {

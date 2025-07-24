@@ -16,7 +16,7 @@ interface SelectInputProps {
   options: Option[];
   placeholder?: string;
   selectedValue?: string;
-  onSelect: (value: string) => void;
+  onSelect: (value: {label : string, value : string}) => void;
 }
 
 const SearchSelectInput: React.FC<SelectInputProps> = ({
@@ -36,7 +36,7 @@ const SearchSelectInput: React.FC<SelectInputProps> = ({
   const handleSelect = (value: string, label: string) => {
     console.log('value is', value);
     setModalVisible(false);
-    onSelect(label);
+    onSelect({label, value});
     setActiveValue(label);
   };
   const inputHandler = (label: any) => {

@@ -1,10 +1,13 @@
-import { UserTypes } from '../types';
+import { AxiosError } from 'axios';
+import { ApiTypes, UserTypes } from '../types';
 import client from './client';
+
+const defaultMessage: string = 'Somenthing went wrong, try after sometime';
 
 export const loginUserThroughPhonePassword = async (
   phoneNumber: string,
   password: string,
-) => {
+): Promise<ApiTypes.ApiResponse> => {
   try {
     const response = await client.post(
       '/auth/login',
@@ -18,23 +21,21 @@ export const loginUserThroughPhonePassword = async (
         },
       },
     );
-    if (response?.data?.success) {
-      console.log('login response:', response);
-      return response.data.data;
-    } else {
-      return null;
-    }
+    return { data: response.data.data, error: null };
   } catch (error) {
-    console.log('error:', error);
-
-    return null;
+    let err = error as AxiosError;
+    console.log('error', err.response);
+    return {
+      data: null,
+      error: err.response?.data?.messsage || defaultMessage,
+    };
   }
 };
 
 export const sendOtpForVerification = async (
   phoneNumber: string,
   otpFor: 'REGISTER' | 'FORGOT_PASSWORD',
-) => {
+): Promise<ApiTypes.ApiResponse> => {
   try {
     const response = await client.post(
       '/auth/generate-otp',
@@ -48,17 +49,13 @@ export const sendOtpForVerification = async (
         },
       },
     );
-    console.log('res:', response);
-
-    if (response?.data) {
-      return true;
-    } else {
-      return false;
-    }
+    return { data: true, error: null };
   } catch (error) {
-    console.log('error:', error);
-
-    return false;
+    let err = error as AxiosError;
+    return {
+      data: null,
+      error: err.response?.data?.messsage || defaultMessage,
+    };
   }
 };
 
@@ -66,7 +63,7 @@ export const verifyOtp = async (
   phoneNumber: string,
   otp: string,
   otpFor: 'REGISTER' | 'FORGOT_PASSWORD',
-) => {
+): Promise<ApiTypes.ApiResponse> => {
   try {
     const response = await client.post(
       '/auth/verify-otp',
@@ -81,20 +78,20 @@ export const verifyOtp = async (
         },
       },
     );
-    if (response?.data) {
-      return response.data.data.token;
-    } else {
-      return '';
-    }
+    return { data: response.data.data.token, error: null };
   } catch (error) {
-    return '';
+    let err = error as AxiosError;
+    return {
+      data: null,
+      error: err.response?.data?.messsage || defaultMessage,
+    };
   }
 };
 
 export const registerUser = async (
   userDetails: UserTypes.UserRegisterForm,
   token: string,
-) => {
+): Promise<ApiTypes.ApiResponse> => {
   console.log('data :', userDetails, token);
 
   try {
@@ -112,35 +109,32 @@ export const registerUser = async (
         },
       },
     );
-    console.log('res:', response);
-    if (response?.data) {
-      return response.data.data;
-    } else {
-      return '';
-    }
+    return { data: response.data.data, error: null };
   } catch (error) {
-    console.log('error:', error);
-
-    return '';
+    let err = error as AxiosError;
+    console.log('error', err.response);
+    return {
+      data: null,
+      error: err.response?.data?.messsage || defaultMessage,
+    };
   }
 };
 
 export const changeUserPassword = async (
   newPassword: string,
   token: string,
-) => {
+): Promise<ApiTypes.ApiResponse> => {
   try {
     const response = await client.post('/auth/change-password', {
       change_password_token: token,
       new_password: newPassword,
     });
-    if (response?.data) {
-      return true;
-    } else {
-      return null;
-    }
+    return { data: true, error: null };
   } catch (error) {
-    console.log('error:', error);
-    return null;
+    let err = error as AxiosError;
+    return {
+      data: null,
+      error: err.response?.data?.messsage || defaultMessage,
+    };
   }
 };

@@ -1,11 +1,19 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Image, ScrollView, StyleSheet } from 'react-native';
 import { Text, TextInput, View } from '../../../components';
 import { useTheme } from '../../../theme/ThemeContext.tsx';
 import { avatars } from '../../../utils/images.ts';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../../store/store.ts';
 
 const MyAccountScreen: React.FC = () => {
   const { colors } = useTheme();
+  const auth = useSelector((state: RootState) => state.auth);
+  const [userDetails, setUserDetails] = useState({
+    name: '',
+    email: '',
+    password: '',
+  });
   return (
     <View
       safe
@@ -28,10 +36,10 @@ const MyAccountScreen: React.FC = () => {
           </View>
 
           <Text h6 n700>
-            Eleyas Hasan
+            {auth.user.name}
           </Text>
           <Text base2 n400>
-            +1 (352) 844 0270
+            {auth.user.phone_number}
           </Text>
         </View>
 
@@ -42,7 +50,11 @@ const MyAccountScreen: React.FC = () => {
               backgroundColor: colors.n50,
             },
           ]}>
-          <TextInput type="single" placeholder="name" />
+          <TextInput
+            type="single"
+            placeholder="name"
+            value={userDetails.name}
+          />
           <TextInput type="single" placeholder="email" />
           <TextInput type="single" placeholder="password" />
         </View>

@@ -39,7 +39,7 @@ const SignupScreen: React.FC = ({}) => {
     );
     console.log('otp response', response);
 
-    if (response) {
+    if (response.data) {
       navigation.navigate('Otp', {
         phoneNumber,
         verificationId: '',
@@ -50,7 +50,7 @@ const SignupScreen: React.FC = ({}) => {
   };
 
   return (
-    <WrappedView isLoading={loading} loadingText={''}>
+    <WrappedView isLoading={loading} loadingStyle="overlay">
       <SafeAreaView
         style={[
           styles.container,
@@ -84,7 +84,7 @@ const SignupScreen: React.FC = ({}) => {
               style={{ marginVertical: 20 }}
               onPress={sendOtpHandler}>
               <Text base blue50>
-                Login
+                Continue
               </Text>
             </Button>
             <View style={[styles.flexRow, { justifyContent: 'center' }]}>

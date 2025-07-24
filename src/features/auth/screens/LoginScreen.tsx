@@ -1,6 +1,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { NavigationProp, useNavigation } from '@react-navigation/native';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   SafeAreaView,
   ScrollView,
@@ -24,6 +24,7 @@ const LoginScreen: React.FC = ({}) => {
   const [password, setPassword] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(false);
   const dispatch = useDispatch();
+
   const loginHandler = async () => {
     if (phoneNumber.length < 8 || password.length < 6) {
       Toast.show({
@@ -33,33 +34,34 @@ const LoginScreen: React.FC = ({}) => {
       return;
     }
     setLoading(true);
-    const user = await authApi.loginUserThroughPhonePassword(
+    const response = await authApi.loginUserThroughPhonePassword(
       phoneNumber,
       password,
     );
-    if (user) {
+    if (response.data) {
+      let user = response.data.user;
+      let loginToken = response.data.login_token;
       await AsyncStorage.multiSet([
-        ['login_token', user.login_token],
+        ['login_token', loginToken],
         ['new_user', 'true'],
         ['role', ''],
       ]);
       dispatch(
         logInUser({
           loggedIn: true,
-          loginToken: user.login_token,
-          id: user.user.id,
-          user: user.user,
+          loginToken: loginToken,
+          id: user.id,
+          user: user,
           newUser: true,
         }),
       );
-      // navigation.navigate('UserFlats', {
-      //   loginToken: '',
-      //   userDetails: {},
-      // });
+      navigation.navigate('UserRole');
     } else {
+      console.log('error in screen', response);
+
       Toast.show({
         type: 'error',
-        text1: 'Please enter a valid phone number and password',
+        text1: response.error,
       });
     }
     setLoading(false);
@@ -122,7 +124,7 @@ const LoginScreen: React.FC = ({}) => {
                 onPress={() => navigation.navigate('Signup')}>
                 <Text base2 primary>
                   {' '}
-                  Registers
+                  Register
                 </Text>
               </TouchableOpacity>
             </View>

@@ -9,7 +9,7 @@ export const store = configureStore({
     auth: authReducer,
     utils: utilsReducer,
     bootstrapData: bootstrapReducer,
-    flatSlice: flatReducer,
+    flat: flatReducer,
   },
 });
 

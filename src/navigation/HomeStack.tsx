@@ -9,13 +9,17 @@ import { NavigationProp, RouteProp } from '@react-navigation/native';
 import { DashboardStackParamList } from './types.ts';
 import VisitorStack from './VisitorStack.tsx';
 import { useTheme } from '../theme/ThemeContext.tsx';
+import RegisterResidentScreen from '../features/dashboard/screens/RegisterResidentScreen.tsx';
+import UserSocietyScreen from '../features/dashboard/screens/UserSocietyScreen.tsx';
 
 const getTitle = route => {
   switch (route) {
-    case 'Visitors':
-      return 'Visitors';
-    case 'AddBill':
-      return 'Add Bill';
+    case 'HomeScreen':
+      return 'Home';
+    case 'RegisterFlat':
+      return 'Add Flat';
+    case 'FlatList':
+      return 'My Flats';
     default:
       return '';
   }
@@ -51,19 +55,15 @@ const HomeStack: React.FC<Props> = ({ route, navigation }) => {
         options={{ headerShown: false }}
       />
       <Stack.Screen
-        name="Visitors"
-        component={VisitorStack}
-        options={{ headerShown: false }}
+        name="RegisterFlat"
+        component={RegisterResidentScreen}
+        options={{ headerShown: true }}
       />
-      <Stack.Screen name="AddBill" component={AddBillScreen} />
+
       <Stack.Screen
-        name="RecentTransactions"
-        component={RecentTransactionsScreen}
-      />
-      <Stack.Screen
-        name="Profile"
-        component={ProfileStack}
-        options={{ headerShown: false }}
+        name="FlatList"
+        component={UserSocietyScreen}
+        options={{ headerShown: true }}
       />
     </Stack.Navigator>
   );

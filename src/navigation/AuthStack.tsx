@@ -6,10 +6,10 @@ import ForgotPasswordScreen from '../features/auth/screens/ForgotPasswordScreen.
 import LoginScreen from '../features/auth/screens/LoginScreen';
 import OtpVerificationScreen from '../features/auth/screens/OtpVerificationScreen.tsx';
 import PersonalInfoScreen from '../features/auth/screens/PersonalInfoScreen.tsx';
-import RegisterResidentScreen from '../features/auth/screens/RegisterResidentScreen.tsx';
+import RegisterResidentScreen from '../features/dashboard/screens/RegisterResidentScreen.tsx';
 import RegisterSocietyScreen from '../features/auth/screens/RegisterSocietyScreen.tsx';
 import SignupScreen from '../features/auth/screens/SignupScreen.tsx';
-import UserSocietyScreen from '../features/auth/screens/UserSocietyScreen.tsx';
+import UserSocietyScreen from '../features/dashboard/screens/UserSocietyScreen.tsx';
 import { RootState } from '../store/store.ts';
 import RegisterFlatsScreen from '../features/auth/screens/RegisterFlatsScreen.tsx';
 import UserRoleScreen from '../features/auth/screens/UserRoleScreen.tsx';

@@ -2,28 +2,31 @@ import { useNavigation } from '@react-navigation/native';
 import React, { act, useEffect, useState } from 'react';
 import { SafeAreaView, ScrollView, StyleSheet } from 'react-native';
 import { bootstrapApi, flatApi, societyApi } from '../../../api/index.ts';
-import { Button, Text, View } from '../../../components';
-import Header from '../../../components/Header';
+import { Button, Text, View } from '../../../components/index.ts';
+import Header from '../../../components/Header.tsx';
 import SearchSelectInput from '../../../components/input/SearchSelectInput.tsx';
 import WrappedView from '../../../components/WrappedView.tsx';
-import { useTheme } from '../../../theme/ThemeContext';
+import { useTheme } from '../../../theme/ThemeContext.tsx';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../../store/store.ts';
+import Toast from 'react-native-toast-message';
 
 const RegisterResidentScreen: React.FC = () => {
   const { colors } = useTheme();
   const navigation = useNavigation();
-  const router = {};
-  const [agree, setAgree] = React.useState(false);
   const [active, setActive] = React.useState({
     state: '',
     city: '',
     society: '',
+    flat: '',
   });
   const [states, setStates] = React.useState<[]>([]);
   const [cities, setCities] = React.useState<[]>([]);
   const [socities, setSocities] = React.useState<[]>([]);
-  const [block, setBlocks] = React.useState<[]>([]);
   const [flats, setFlats] = React.useState<[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
+  const [selectedFlatId, setSelectedFlatId] = useState<string>('');
+  const auth = useSelector((state: RootState) => state.auth);
 
   const fetchState = async () => {
     let response = await bootstrapApi.getStates();
@@ -57,8 +60,42 @@ const RegisterResidentScreen: React.FC = () => {
 
   const fetchBlockAndFlats = async (societyId: string) => {
     setLoading(true);
-    let repsonse = await flatApi.fetchBlockAndFlatsForSociety(societyId);
-    let newBlocks = setLoading(false);
+    let response = await flatApi.fetchBlockAndFlatsForSociety(societyId);
+    console.log('response for flat: ', response);
+
+    if (response.data) {
+      let newFlats = response.data.map(flat => ({
+        value: flat.flat_id,
+        label: `${flat.flat_no} / ${flat.block_no}`,
+      }));
+      setFlats(newFlats);
+    }
+    setLoading(false);
+  };
+
+  const addFlatHandler = async () => {
+    setLoading(true);
+    let response = await flatApi.registerFlatRequest(
+      selectedFlatId,
+      auth.loginToken,
+    );
+    if (response.data) {
+      Toast.show({
+        type: 'success',
+        text1: 'Request created',
+        visibilityTime: 3000,
+        onHide: () => navigation.goBack(),
+        text2:
+          'You will be member of society when your request is accepted by society admin',
+      });
+    } else {
+      Toast.show({
+        type: 'error',
+        text1: 'Error',
+        text2: response.error,
+      });
+    }
+    setLoading(false);
   };
 
   useEffect(() => {
@@ -77,7 +114,6 @@ const RegisterResidentScreen: React.FC = () => {
             backgroundColor: colors.background,
           },
         ]}>
-        <Header type="secondary" title="Register new flat" />
         <ScrollView>
           <View style={[styles.titleContainer]}>
             <Text base2 n600>
@@ -89,48 +125,48 @@ const RegisterResidentScreen: React.FC = () => {
               options={states}
               label="State"
               placeholder={active.state || 'Click to select'}
-              onSelect={async value => {
-                setActive(prev => ({ ...prev, state: value }));
-                await fetchCities(value);
+              onSelect={async val => {
+                setActive(prev => ({ ...prev, state: val.value }));
+                await fetchCities(val.value);
               }}
             />
             <SearchSelectInput
               options={cities}
               label="City"
               placeholder={active.city || 'Click to select'}
-              onSelect={async value => {
-                setActive(prev => ({ ...prev, city: value }));
-                await fetchSocieties(value, active.state);
+              onSelect={async val => {
+                setActive(prev => ({ ...prev, city: val.label }));
+                await fetchSocieties(val.value, active.state);
               }}
             />
             <SearchSelectInput
               options={socities}
               label="Society"
               placeholder={active.society || 'Click to select'}
-              onSelect={async value => {
-                setActive(prev => ({ ...prev, society: value }));
+              onSelect={async val => {
+                setActive(prev => ({ ...prev, society: val.label }));
                 let selectedSocietyId = -1;
                 // for(let i = 0; i < socities.length;i++){
                 //   if(socities[i].label == )
                 // }
-                await fetchBlockAndFlats();
+                await fetchBlockAndFlats(val.value);
               }}
             />
-            {/* <SearchSelectInput
-              options={[]}
-              label="Block No"
-              onSelect={() => {}}
-            /> */}
+
             <SearchSelectInput
-              options={[]}
+              options={flats}
               label="Flat No"
-              onSelect={() => {}}
+              placeholder={active.flat || 'Click to select'}
+              onSelect={val => {
+                setActive(prev => ({ ...prev, flat: val.label }));
+                setSelectedFlatId(val.value);
+              }}
             />
 
             <Button
               type="primary"
               style={{ marginTop: 24 }}
-              onPress={() => navigation.navigate('Dashboard')}>
+              onPress={addFlatHandler}>
               <Text base blue50>
                 Register
               </Text>

@@ -35,23 +35,30 @@ const OtpVerificationScreen: React.FC = () => {
     if (otpCode.length !== 6) {
       Toast.show({
         type: 'error',
-        text1: 'Please enter a valid 6-digit OTP',
+        text1: 'Invalid Input',
+        text2: 'Please enter a valid 6-digit OTP',
       });
       return;
     }
     setLoading(true);
     const response = await authApi.verifyOtp(phoneNumber, otpCode, otpFor);
-    if (response) {
+    if (response.data) {
       console.log('registration token:', response);
       if (otpFor == 'REGISTER') {
         navigation.navigate('Register', {
-          registrationToken: response,
+          registrationToken: response.data,
         });
       } else {
         navigation.navigate('ChangePassword', {
           forgotPasswordToken: response,
         });
       }
+    } else {
+      Toast.show({
+        type: 'error',
+        text1: 'Error',
+        text2: response.error,
+      });
     }
     setLoading(false);
   };

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Dimensions,
   StatusBar,
@@ -10,11 +10,68 @@ import { useTheme } from '../../../theme/ThemeContext.tsx';
 import { useNavigation } from '@react-navigation/native';
 import Section from '../components/Section.tsx';
 import Services from '../components/Services.tsx';
+import DashboardHeader from '../components/DashboardHeader.tsx';
+import { flatApi } from '../../../api/index.ts';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from '../../../store/store.ts';
+import { setFlatList } from '../../../reducers/flatSlice.ts';
+import {
+  FlatDetailsResponseType,
+  FlatDetailsType,
+} from '../../../types/flat.types.ts';
+import { setLoading } from '../../../reducers/utilssSlice.ts';
+import Toast from 'react-native-toast-message';
 
 const HomeScreen: React.FC = () => {
   const { colors } = useTheme();
   const navigation = useNavigation();
   const colorScheme = useColorScheme();
+  const auth = useSelector((state: RootState) => state.auth);
+  const [loading, setLoading] = useState<boolean>(false);
+  const userFlatList = useSelector((state: RootState) => state.flat.flatList);
+  const flatStore = useSelector((state: RootState) => state.flat);
+  const dispatch = useDispatch();
+
+  const getFlats = async () => {
+    setLoading(true);
+    let response = await flatApi.getUserFlatList(auth.loginToken);
+    if (response.data) {
+      let flatList: any[] = response.data.map(
+        (val: FlatDetailsResponseType) => ({
+          flatId: val.flat_id,
+          flatNo: val.flat_no,
+          blockNo: val.block_no,
+          societyId: val.society_id,
+          societyName: val.society_name,
+        }),
+      );
+      if (flatStore.activeFlatId) {
+        let index = flatList.findIndex(
+          flat => flat.flatId == flatStore.activeFlatId,
+        );
+        if (index >= 0) {
+          let removedFlat = flatList[index];
+          flatList.splice(index, 1);
+          flatList.unshift(removedFlat);
+        }
+      }
+      dispatch(setFlatList(flatList));
+    } else {
+      Toast.show({
+        type: 'error',
+        text1: 'Error',
+        text2: response.error,
+      });
+    }
+    setLoading(false);
+  };
+
+  useEffect(() => {
+    getFlats()
+      .then(() => {})
+      .catch(err => {});
+  }, []);
+
   return (
     <View
       safe
@@ -23,13 +80,9 @@ const HomeScreen: React.FC = () => {
         barStyle={colorScheme === 'dark' ? 'light-content' : 'dark-content'}
         backgroundColor={colors.background}
       />
-      <Header
-        type="main"
-        onPress={() => navigation.navigate('Profile')}
-        style={styles.header}
-      />
+      <DashboardHeader flats={userFlatList} />
       <Section title="Community">
-        <Services items={[]} />
+        <Services />
       </Section>
     </View>
   );

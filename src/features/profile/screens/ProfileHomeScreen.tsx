@@ -70,10 +70,10 @@ const ProfileHomeScreen: React.FC = ({ profileItems = mock.profileItems }) => {
                 },
               ]}>
               <Text base n700>
-                Eleyas Hasan
+                {auth.user.name}
               </Text>
               <Text caption n400>
-                +1 352 844 0270
+                {auth.user.phone_number}
               </Text>
             </View>
           </View>

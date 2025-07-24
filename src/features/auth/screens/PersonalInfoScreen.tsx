@@ -9,6 +9,8 @@ import WrappedView from '../../../components/WrappedView';
 import { useTheme } from '../../../theme/ThemeContext';
 import { UserTypes } from '../../../types';
 import { logInUser } from '../authSlice';
+import Toast from 'react-native-toast-message';
+import { errors } from '../../../utils';
 
 const PersonalInfoScreen: React.FC = () => {
   const { colors } = useTheme();
@@ -35,22 +37,36 @@ const PersonalInfoScreen: React.FC = () => {
   };
 
   const registerUserHandler = async () => {
+    if (userDetails.password !== userDetails.confirmPassword) {
+      Toast.show({
+        type: 'error',
+        text1: errors.FRONT_001.id,
+        text2: errors.FRONT_001.message,
+      });
+      return;
+    }
     setLoading(true);
     const response = await authApi.registerUser(userDetails, registrationToken);
-    if (response) {
-      await AsyncStorage.setItem('login_token', response.login_token);
+    if (response.data) {
+      await AsyncStorage.setItem('login_token', response.data.login_token);
       dispatch(
         logInUser({
           loggedIn: true,
-          loginToken: response.login_token,
-          user: response.user,
-          id: response.user.id,
+          loginToken: response.data.login_token,
+          user: response.data.user,
+          id: response.data.user.id,
           newUser: true,
         }),
       );
-      navigation.navigate('UserFlats', {
+      navigation.navigate('UserRole', {
         loginToken: '',
         userDetails: {},
+      });
+    } else {
+      Toast.show({
+        type: 'error',
+        text1: 'Error',
+        text2: response.error,
       });
     }
     setLoading(false);
@@ -99,6 +115,11 @@ const PersonalInfoScreen: React.FC = () => {
             />
             <TextInput
               type="password"
+              error={
+                userDetails.password !== userDetails.confirmPassword
+                  ? 'Password does not match'
+                  : ''
+              }
               placeholder="Confirm password"
               onChangeText={value =>
                 inputChangeHandler(value, 'confirmPassword')
@@ -108,7 +129,9 @@ const PersonalInfoScreen: React.FC = () => {
             <Button
               type="primary"
               style={{ marginTop: 24 }}
-              onPress={registerUserHandler}>
+              onPress={async () => {
+                await registerUserHandler();
+              }}>
               <Text base blue50>
                 Register
               </Text>

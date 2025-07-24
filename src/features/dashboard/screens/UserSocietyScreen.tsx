@@ -8,15 +8,15 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
-import { flatApi } from '../../../api';
-import { Button, Text, View } from '../../../components';
+import { flatApi } from '../../../api/index.ts';
+import { Button, Text, View } from '../../../components/index.ts';
 import Empty from '../../../components/common/Empty.tsx';
 import WrappedView from '../../../components/WrappedView.tsx';
 import { setActiveFlat } from '../../../reducers/flatSlice.ts';
 import { RootState } from '../../../store/store.ts';
-import { useTheme } from '../../../theme/ThemeContext';
-import { FlatTypes } from '../../../types';
-import { setNewUser } from '../authSlice.ts';
+import { useTheme } from '../../../theme/ThemeContext.tsx';
+import { FlatTypes } from '../../../types/index.ts';
+import { setNewUser } from '../../auth/authSlice.ts';
 
 const UserSocietyScreen: React.FC = () => {
   const { colors } = useTheme();
@@ -32,38 +32,18 @@ const UserSocietyScreen: React.FC = () => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
 
-  const getUserFlats = async () => {
-    setLoading(true);
-    const response = await flatApi.getUserFlatList(auth.loginToken);
-
-    if (response) {
-      setUserFlats(response);
-    }
-    setLoading(false);
-  };
-
-  useEffect(() => {
-    getUserFlats().then().catch();
-  }, []);
+  const flatStore = useSelector((state: RootState) => state.flat);
 
   const userFlatHandler = async (idx: number) => {
     setLoading(true);
-    let selectedFlat = userFlats[idx];
+    let selectedFlat = flatStore.flatList[idx];
     if (!selectedFlat) {
       return;
     }
-    let activeFlat: FlatTypes.FlatDetailsType = {
-      flatId: selectedFlat.flat_id,
-      flatNo: selectedFlat.flat_no,
-      blockNo: selectedFlat.block_no,
-      societyId: selectedFlat.society_id,
-      societyName: selectedFlat.society_name,
-    };
-    dispatch(setNewUser(false));
-    dispatch(setActiveFlat(activeFlat));
-    await AsyncStorage.removeItem('new_user');
-    await AsyncStorage.setItem('active_flat', selectedFlat.flat_id);
+    dispatch(setActiveFlat(selectedFlat));
+    await AsyncStorage.setItem('active_flat', selectedFlat.flatId);
     setLoading(false);
+    navigation.goBack();
   };
 
   return (
@@ -78,20 +58,17 @@ const UserSocietyScreen: React.FC = () => {
         {/*<Header type="secondary" title="Register" />*/}
         <View style={{ flex: 1 }}>
           <View style={[styles.titleContainer]}>
-            <Text h5 n800>
-              Select Society
-            </Text>
-            <Text base2 n600>
+            <Text base2 n800>
               Please select your flat to continue
             </Text>
           </View>
 
-          {userFlats.length > 0 ? (
+          {flatStore.flatList.length > 0 ? (
             <View style={[styles.societyContainer]}>
               <FlatList
                 showsVerticalScrollIndicator={false}
                 style={{ width: '100%' }}
-                data={userFlats}
+                data={flatStore.flatList}
                 renderItem={({ item, index }) => (
                   <TouchableOpacity
                     style={[
@@ -103,11 +80,11 @@ const UserSocietyScreen: React.FC = () => {
                     }}>
                     <Text base n600>
                       {' '}
-                      Flat no:{item.flat_no} Block no:{item.block_no}
+                      Flat no:{item.flatNo} Block no:{item.blockNo}
                     </Text>
                     <Text base n700>
                       {' '}
-                      {item.society_name}
+                      {item.societyName}
                     </Text>
                   </TouchableOpacity>
                 )}
@@ -122,21 +99,9 @@ const UserSocietyScreen: React.FC = () => {
           <Button
             type="primary"
             style={{ marginVertical: 20 }}
-            onPress={() => navigation.navigate('RegisterResident')}>
+            onPress={() => navigation.navigate('RegisterFlat')}>
             <Text base blue50>
               Register your new flat
-            </Text>
-          </Button>
-          <Text base2 style={{ textAlign: 'center' }}>
-            Or
-          </Text>
-
-          <Button
-            type="secondary"
-            style={{ marginVertical: 20 }}
-            onPress={() => navigation.navigate('RegisterSociety')}>
-            <Text base primary>
-              Register new society
             </Text>
           </Button>
         </View>

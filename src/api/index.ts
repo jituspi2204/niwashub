@@ -6,7 +6,8 @@ import { endpoints } from './endpoints.ts';
 import * as flatApi from './flatApi.ts';
 import * as userApi from './userApi.ts';
 import * as societyApi from './societyApi.ts';
-
+import socketService from './socketService.ts';
+import * as chatApi from './chatApi.ts'
 export {
   ApiWrapper,
   authApi,
@@ -16,4 +17,6 @@ export {
   flatApi,
   userApi,
   societyApi,
+  socketService,
+  chatApi
 };
